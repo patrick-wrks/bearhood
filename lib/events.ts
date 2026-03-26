@@ -17,60 +17,37 @@ type SupabaseEvent = {
 
 export const demoEvents: EventItem[] = [
   {
-    id: "1",
-    title: "Bearhood Night Market",
-    shortDescription: "Street food, neon visuals, and live DJ sets.",
+    id: "naughty-club-edition",
+    title: "Naughty! club edition",
+    shortDescription: "Naked Industries meets raw desire in dim industrial light.",
     description:
-      "An open-air evening market packed with local vendors, immersive light installations, and back-to-back DJ performances curated by Bearhood.",
-    date: "2026-05-14T19:30:00.000Z",
-    location: "Riverfront District, Austin",
-    imageUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1600&q=80",
+      "Naked Industries <br>Worker-Attitude meets raw desire. Boots on concrete, harness on skin, helmets, suspenders, and industrial vibes in the dim light. Masculine, direct, uncompromising. Here, there is sweat, play, and work—on the body, in the gaze, in the tension between closeness and dominance..<br>Dress it rugged. Wear it proud.",
+    date: "2026-03-29T18:00:00+02:00",
+    location:
+      "Club Culture Houze Görlitzerstraße 71, 10997 Berlin.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1600&q=80",
     isFeatured: true,
-    capacity: 500,
-    price: 25,
-    tags: ["music", "food", "nightlife"],
-  },
-  {
-    id: "2",
-    title: "Forest Pulse Festival",
-    shortDescription: "A one-night forest stage with visual storytelling.",
-    description:
-      "Escape into a curated woodland venue featuring electronic artists, projection mapping, and interactive zones that blend sound and nature.",
-    date: "2026-06-21T20:00:00.000Z",
-    location: "Pine Ridge Grounds, Portland",
-    imageUrl: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1600&q=80",
-    isFeatured: true,
-    capacity: 1200,
-    price: 49,
-    tags: ["festival", "electronic", "outdoor"],
-  },
-  {
-    id: "3",
-    title: "Bearhood Creator Social",
-    shortDescription: "Meet creatives, founders, and storytellers.",
-    description:
-      "A casual networking event built for creators and operators in media, design, and music. Expect panel chats, short showcases, and after-hours sessions.",
-    date: "2026-04-28T18:00:00.000Z",
-    location: "Studio Nine, Los Angeles",
-    imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80",
-    isFeatured: false,
-    capacity: 220,
-    price: 15,
-    tags: ["networking", "creative", "community"],
-  },
-  {
-    id: "4",
-    title: "Midnight Rooftop Sessions",
-    shortDescription: "Late-night city views and curated house music.",
-    description:
-      "A premium rooftop session with rising producers, cinematic lighting, and skyline visuals designed for a high-energy yet intimate social vibe.",
-    date: "2026-07-03T23:00:00.000Z",
-    location: "Skyline Deck, Chicago",
-    imageUrl: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1600&q=80",
-    isFeatured: false,
     capacity: 300,
-    price: 35,
-    tags: ["music", "rooftop", "social"],
+    price: 0,
+    tags: ["cruising", "fetish"],
+  },
+  {
+    id: "bearoke",
+    title: "Bearoke",
+    shortDescription:
+      "A legendary Bearhood tradition is back: BEARAOKE with karaoke + box hopping.",
+    description:
+      "Eine legendäre Tradition aus der Zeit lange vor Corona ist zurück!<br><br>Am Gründonnerstag feiern wir die Wiederbelebung von BEARAOKE – laut, herzlich und herrlich ungezwungen.<br><br>Jeder darf mitsingen.<br>Such dir deinen Lieblingssong aus, schnapp dir das Mikro oder sing einfach aus vollem Herzen mit – ganz egal, ob du Bühnenprofi bist oder nur unter der Dusche übst. Hier geht es um Spaß, Gemeinschaft und gute Vibes.<br><br>Durch den Abend führt euch u. a. Monnica Bearvisky mit Charme, Humor und Glamour durch die Bühnenshow.<br><br>✨ Was euch erwartet:<br>Karaoke-Bühnenshow & kostenloses Box-Hopping<br>Optionale Bierflat für 25 €, vor Ort erhältlich 🍺<br>Kostenfreie Garderobe<br>Darkroom für alle, die nach dem Singen noch andere Töne anschlagen wollen<br>Offene, respektvolle Atmosphäre<br>Ob alte BEARAOKE-Stimmen oder neue Gesichter: Komm vorbei, sing dich frei und erlebe mit uns das Comeback einer echten Tradition.<br>Weitere Infos folgen – wir freuen uns auf euch!<br>__________________________________<br><br>A legendary Bearhood tradition from long before COVID is finally back!<br><br>This Maundy Thursday, we’re bringing BEARAOKE back to life – loud, warm-hearted and wonderfully unapologetic.<br><br>Everyone is welcome to sing.<br>Pick your favorite song, grab the mic or simply sing along at the top of your lungs – whether you’re a stage pro or a shower singer. It’s all about fun, community and good vibes.<br><br>Hosted on stage by the fabulous Monnica Bearvisky, guiding you through the night with charm, humor and a touch of glam.<br><br>✨ What to expect:<br>Karaoke stage show & free box hopping<br>Optional beer flat for €25, available on site 🍺<br>Free cloakroom<br>Darkroom for those who want to explore deeper tones later on<br>An open, respectful and welcoming atmosphere<br>Whether you’ve been part of BEARAOKE back in the day or are joining for the first time: Come together, sing it out and celebrate the return of a true tradition.<br>More info coming soon – we can’t wait to see you!",
+    date: "2026-04-02T20:00:00+02:00",
+    location:
+      "Monster Ronson's Ichiban Karaoke, Warschauer Straße 34, 10243 Berlin",
+    imageUrl:
+      "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1600&q=80",
+    isFeatured: true,
+    capacity: 400,
+    price: 0,
+    tags: ["party", "social", "cruising"],
   },
 ];
 
@@ -100,7 +77,7 @@ export async function getEvents(): Promise<EventItem[]> {
     .select("*")
     .order("date", { ascending: true });
 
-  if (error || !data) {
+  if (error || !data || data.length === 0) {
     return demoEvents;
   }
 

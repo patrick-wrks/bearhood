@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { CalendarDays, MapPin, Ticket } from "lucide-react";
 import {
   Dialog,
@@ -19,9 +20,17 @@ type EventModalProps = {
 };
 
 export function EventModal({ event, open, onOpenChange }: EventModalProps) {
-  if (!event) {
-    return null;
-  }
+  const descriptionText = useMemo(() => {
+    if (!event) return "";
+    // Supabase/demo content may include <br> tags. Convert them to real line breaks.
+    return event.description.replace(/<br\s*\/?>/gi, "\n");
+  }, [event]);
+
+  const [expanded, setExpanded] = useState(false);
+
+  const needsReadMore = descriptionText.replace(/\s+/g, " ").length > 220;
+
+  if (!event) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -39,7 +48,26 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          <p className="text-sm leading-7 text-foreground/90">{event.description}</p>
+          <div className="space-y-2">
+            <p
+              className={[
+                "text-sm leading-7 text-foreground/90 whitespace-pre-line",
+                expanded ? "" : "line-clamp-6",
+              ].join(" ")}
+            >
+              {descriptionText}
+            </p>
+
+            {needsReadMore && (
+              <button
+                type="button"
+                className="text-sm font-medium text-foreground/90 underline underline-offset-4 hover:text-foreground"
+                onClick={() => setExpanded((v) => !v)}
+              >
+                {expanded ? "Show less" : "Read more"}
+              </button>
+            )}
+          </div>
 
           <div className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
             <p className="flex items-center gap-2">

@@ -17,6 +17,9 @@ export function Navbar() {
           <a href="#events" className="transition-colors hover:text-foreground">
             Events
           </a>
+          <Link href="/ui-foundation" className="transition-colors hover:text-foreground">
+            UI Foundation
+          </Link>
           <a href="#about" className="transition-colors hover:text-foreground">
             About
           </a>

@@ -32,7 +32,9 @@ export function EventsExperience() {
       <HeroSlider events={events} />
 
       <section id="events" className="space-y-4">
-        <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Upcoming Events</h2>
+        <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+          Upcoming Parties
+        </h2>
         <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
           Discover the next wave of Bearhood experiences. Tap any event card to view details,
           lineups, and attendance info.

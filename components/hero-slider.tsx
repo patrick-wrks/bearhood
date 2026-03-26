@@ -50,7 +50,7 @@ export function HeroSlider({ events }: HeroSliderProps) {
 
               <div className="absolute inset-0 flex items-end p-6 md:p-10">
                 <div className="max-w-2xl space-y-4">
-                  <p className="inline-flex rounded-full border border-primary/40 bg-black/30 px-3 py-1 text-xs text-primary">
+                  <p className="inline-flex rounded-full border border-white/50 bg-black/60 px-3 py-1 text-xs font-medium text-white">
                     Featured Event
                   </p>
                   <h1 className="text-3xl font-bold tracking-tight text-white md:text-5xl">
@@ -59,11 +59,11 @@ export function HeroSlider({ events }: HeroSliderProps) {
                   <p className="text-sm text-zinc-200 md:text-base">{event.shortDescription}</p>
                   <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-200 md:text-sm">
                     <p className="flex items-center gap-2">
-                      <CalendarDays className="h-4 w-4 text-primary" />
+                      <CalendarDays className="h-4 w-4 text-white" />
                       {new Date(event.date).toLocaleDateString()}
                     </p>
                     <p className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-primary" />
+                      <MapPin className="h-4 w-4 text-white" />
                       {event.location}
                     </p>
                   </div>
@@ -74,8 +74,8 @@ export function HeroSlider({ events }: HeroSliderProps) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="left-4" />
-      <CarouselNext className="right-4" />
+      <CarouselPrevious className="left-4 border-white/40 bg-black/40 text-white hover:bg-black/60 hover:text-white" />
+      <CarouselNext className="right-4 border-white/40 bg-black/40 text-white hover:bg-black/60 hover:text-white" />
     </Carousel>
   );
 }

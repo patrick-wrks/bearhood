@@ -25,7 +25,12 @@ export function EventGrid({ events }: EventGridProps) {
           <EventCard key={event.id} event={event} onSelect={handleSelectEvent} />
         ))}
       </div>
-      <EventModal event={selectedEvent} open={isModalOpen} onOpenChange={setIsModalOpen} />
+      <EventModal
+        key={`${selectedEvent?.id ?? "none"}-${isModalOpen ? "open" : "closed"}`}
+        event={selectedEvent}
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+      />
     </>
   );
 }
