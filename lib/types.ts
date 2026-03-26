@@ -6,6 +6,8 @@ export type EventItem = {
   date: string;
   location: string;
   imageUrl: string;
+  ticketUrl?: string;
+  learnMoreUrl?: string;
   isFeatured: boolean;
   capacity: number;
   price: number;

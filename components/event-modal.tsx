@@ -33,6 +33,9 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
 
   if (!event) return null;
 
+  const ticketUrl = event.ticketUrl;
+  const learnMoreUrl = event.learnMoreUrl ?? event.ticketUrl;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto border-border/80 bg-card sm:max-w-2xl">
@@ -94,8 +97,25 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button className="sm:flex-1">Get Tickets</Button>
-            <Button variant="outline" className="sm:flex-1">
+            <Button
+              className="sm:flex-1"
+              disabled={!ticketUrl}
+              onClick={() => {
+                if (!ticketUrl) return;
+                window.open(ticketUrl, "_blank", "noopener,noreferrer");
+              }}
+            >
+              Get Tickets
+            </Button>
+            <Button
+              variant="outline"
+              className="sm:flex-1"
+              disabled={!learnMoreUrl}
+              onClick={() => {
+                if (!learnMoreUrl) return;
+                window.open(learnMoreUrl, "_blank", "noopener,noreferrer");
+              }}
+            >
               Learn More
             </Button>
           </div>

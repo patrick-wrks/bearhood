@@ -14,6 +14,21 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Bearhood | Social Media Event Brand",
   description: "Explore upcoming Bearhood events, festival drops, and community socials.",
+  icons: {
+    icon: {
+      url: "/favicon.png",
+      type: "image/png",
+    },
+    shortcut: {
+      url: "/favicon.png",
+      type: "image/png",
+    },
+    apple: {
+      url: "/apple-touch-icon.png",
+      type: "image/png",
+      sizes: "180x180",
+    },
+  },
 };
 
 export default function RootLayout({

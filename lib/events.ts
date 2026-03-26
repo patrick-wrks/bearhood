@@ -16,6 +16,8 @@ type SupabaseEvent = {
   date: string;
   location: string;
   image_url: string;
+  ticket_url?: string;
+  learn_more_url?: string;
   is_featured: boolean;
   capacity: number;
   price: number;
@@ -34,6 +36,10 @@ export const demoEvents: EventItem[] = [
       "Club Culture Houze Görlitzerstraße 71, 10997 Berlin.",
     imageUrl:
       assetToSrc(bannerNaughty),
+    ticketUrl:
+      "https://www.club-culture-houze.de/Veranstaltung/b-2/?instance_id=38619",
+    learnMoreUrl:
+      "https://www.club-culture-houze.de/Veranstaltung/b-2/?instance_id=38619",
     isFeatured: true,
     capacity: 300,
     price: 0,
@@ -51,6 +57,10 @@ export const demoEvents: EventItem[] = [
       "Monster Ronson's Ichiban Karaoke, Warschauer Straße 34, 10243 Berlin",
     imageUrl:
       assetToSrc(bannerBearaoke),
+    ticketUrl:
+      "https://www.eventbrite.de/e/bearaoke-the-return-tickets-1982241454551?aff=web",
+    learnMoreUrl:
+      "https://www.eventbrite.de/e/bearaoke-the-return-tickets-1982241454551?aff=web",
     isFeatured: true,
     capacity: 400,
     price: 0,
@@ -66,6 +76,20 @@ function mapSupabaseEvent(event: SupabaseEvent): EventItem {
         ? assetToSrc(bannerBearaoke)
         : event.image_url;
 
+  const ticketUrl =
+    event.id === "naughty-club-edition"
+      ? "https://www.club-culture-houze.de/Veranstaltung/b-2/?instance_id=38619"
+      : event.id === "bearoke"
+        ? "https://www.eventbrite.de/e/bearaoke-the-return-tickets-1982241454551?aff=web"
+        : event.ticket_url;
+
+  const learnMoreUrl =
+    event.id === "naughty-club-edition"
+      ? "https://www.club-culture-houze.de/Veranstaltung/b-2/?instance_id=38619"
+      : event.id === "bearoke"
+        ? "https://www.eventbrite.de/e/bearaoke-the-return-tickets-1982241454551?aff=web"
+        : event.learn_more_url;
+
   return {
     id: event.id,
     title: event.title,
@@ -74,6 +98,8 @@ function mapSupabaseEvent(event: SupabaseEvent): EventItem {
     date: event.date,
     location: event.location,
     imageUrl,
+    ticketUrl,
+    learnMoreUrl,
     isFeatured: event.is_featured,
     capacity: event.capacity,
     price: Number(event.price),

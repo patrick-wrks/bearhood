@@ -1,15 +1,24 @@
 "use client";
 
-import { CalendarDays, Menu } from "lucide-react";
+import Image from "next/image";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import logo from "@BearhoodAssets/Logo.png";
 
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-6">
         <Link className="flex items-center gap-2 text-lg font-semibold tracking-wide" href="/">
-          <CalendarDays className="h-5 w-5 text-primary" />
+          <Image
+            src={logo}
+            alt="Bearhood"
+            width={28}
+            height={28}
+            priority
+            className="h-7 w-7"
+          />
           <span>BEARHOOD</span>
         </Link>
 

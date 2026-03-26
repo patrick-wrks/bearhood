@@ -6,9 +6,17 @@ import { HeroSlider } from "@/components/hero-slider";
 import { Separator } from "@/components/ui/separator";
 import { demoEvents, getEvents } from "@/lib/events";
 import type { EventItem } from "@/lib/types";
+import { EventModal } from "@/components/event-modal";
 
 export function EventsExperience() {
   const [events, setEvents] = useState<EventItem[]>(demoEvents);
+  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSelectEvent = (event: EventItem) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -29,7 +37,7 @@ export function EventsExperience() {
 
   return (
     <>
-      <HeroSlider events={events} />
+      <HeroSlider events={events} onExploreEvent={handleSelectEvent} />
 
       <section id="events" className="space-y-4">
         <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
@@ -40,8 +48,15 @@ export function EventsExperience() {
           lineups, and attendance info.
         </p>
         <Separator className="my-4" />
-        <EventGrid events={events} />
+        <EventGrid events={events} onSelectEvent={handleSelectEvent} />
       </section>
+
+      <EventModal
+        key={`${selectedEvent?.id ?? "none"}-${isModalOpen ? "open" : "closed"}`}
+        event={selectedEvent}
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+      />
     </>
   );
 }

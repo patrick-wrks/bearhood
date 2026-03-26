@@ -1,36 +1,31 @@
 "use client";
-
-import { useState } from "react";
 import { EventCard } from "@/components/event-card";
-import { EventModal } from "@/components/event-modal";
 import type { EventItem } from "@/lib/types";
 
 type EventGridProps = {
   events: EventItem[];
+  onSelectEvent: (event: EventItem) => void;
 };
 
-export function EventGrid({ events }: EventGridProps) {
-  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleSelectEvent = (event: EventItem) => {
-    setSelectedEvent(event);
-    setIsModalOpen(true);
-  };
-
+export function EventGrid({ events, onSelectEvent }: EventGridProps) {
   return (
     <>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex gap-4 overflow-x-auto pb-2 md:hidden snap-x snap-mandatory">
         {events.map((event) => (
-          <EventCard key={event.id} event={event} onSelect={handleSelectEvent} />
+          <div
+            key={event.id}
+            className="w-[85vw] max-w-[420px] flex-shrink-0 snap-start"
+          >
+            <EventCard event={event} onSelect={onSelectEvent} />
+          </div>
         ))}
       </div>
-      <EventModal
-        key={`${selectedEvent?.id ?? "none"}-${isModalOpen ? "open" : "closed"}`}
-        event={selectedEvent}
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-      />
+
+      <div className="hidden md:grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} onSelect={onSelectEvent} />
+        ))}
+      </div>
     </>
   );
 }
