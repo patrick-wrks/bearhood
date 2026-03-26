@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { EventItem } from "@/lib/types";
+import { formatEventDate, formatEventTime } from "@/lib/utils";
 
 type EventModalProps = {
   event: EventItem | null;
@@ -72,7 +73,7 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
           <div className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
             <p className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-primary" />
-              {new Date(event.date).toLocaleString()}
+              {formatEventDate(event.date)} {formatEventTime(event.date)}
             </p>
             <p className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />

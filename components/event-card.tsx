@@ -2,6 +2,7 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { EventItem } from "@/lib/types";
+import { formatEventDate } from "@/lib/utils";
 
 type EventCardProps = {
   event: EventItem;
@@ -34,7 +35,7 @@ export function EventCard({ event, onSelect }: EventCardProps) {
         <div className="space-y-2 text-xs text-muted-foreground">
           <p className="flex items-center gap-2">
             <CalendarDays className="h-4 w-4 text-primary" />
-            {new Date(event.date).toLocaleDateString()}
+            {formatEventDate(event.date)}
           </p>
           <p className="flex items-center gap-2">
             <MapPin className="h-4 w-4 text-primary" />

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import type { EventItem } from "@/lib/types";
+import { formatEventDate } from "@/lib/utils";
 
 type HeroSliderProps = {
   events: EventItem[];
@@ -60,7 +61,7 @@ export function HeroSlider({ events }: HeroSliderProps) {
                   <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-200 md:text-sm">
                     <p className="flex items-center gap-2">
                       <CalendarDays className="h-4 w-4 text-white" />
-                      {new Date(event.date).toLocaleDateString()}
+                      {formatEventDate(event.date)}
                     </p>
                     <p className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-white" />

@@ -1,6 +1,13 @@
 import { hasSupabaseConfig, supabase } from "@/lib/supabase";
 import type { EventItem } from "@/lib/types";
 
+import bannerNaughty from "@BearhoodAssets/Banner-Naughty-2.webp";
+import bannerBearaoke from "@BearhoodAssets/Banner-Bearaoke.webp";
+
+function assetToSrc(asset: { src: string } | string): string {
+  return typeof asset === "string" ? asset : asset.src;
+}
+
 type SupabaseEvent = {
   id: string;
   title: string;
@@ -26,7 +33,7 @@ export const demoEvents: EventItem[] = [
     location:
       "Club Culture Houze Görlitzerstraße 71, 10997 Berlin.",
     imageUrl:
-      "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1600&q=80",
+      assetToSrc(bannerNaughty),
     isFeatured: true,
     capacity: 300,
     price: 0,
@@ -43,7 +50,7 @@ export const demoEvents: EventItem[] = [
     location:
       "Monster Ronson's Ichiban Karaoke, Warschauer Straße 34, 10243 Berlin",
     imageUrl:
-      "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1600&q=80",
+      assetToSrc(bannerBearaoke),
     isFeatured: true,
     capacity: 400,
     price: 0,
@@ -52,6 +59,13 @@ export const demoEvents: EventItem[] = [
 ];
 
 function mapSupabaseEvent(event: SupabaseEvent): EventItem {
+  const imageUrl =
+    event.id === "naughty-club-edition"
+      ? assetToSrc(bannerNaughty)
+      : event.id === "bearoke"
+        ? assetToSrc(bannerBearaoke)
+        : event.image_url;
+
   return {
     id: event.id,
     title: event.title,
@@ -59,7 +73,7 @@ function mapSupabaseEvent(event: SupabaseEvent): EventItem {
     shortDescription: event.short_description,
     date: event.date,
     location: event.location,
-    imageUrl: event.image_url,
+    imageUrl,
     isFeatured: event.is_featured,
     capacity: event.capacity,
     price: Number(event.price),
