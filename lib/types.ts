@@ -1,8 +1,18 @@
-export type ResponseStatus = "interested" | "attending";
+export type EventSocialCounts = {
+  likes: number;
+  comments: number;
+};
 
-export type EventResponseCounts = {
-  interested: number;
-  attending: number;
+export type EventComment = {
+  id: string;
+  userId: string;
+  eventId: string;
+  content: string;
+  createdAt: string;
+  profile?: {
+    username: string | null;
+    avatarUrl: string | null;
+  };
 };
 
 export type EventItem = {

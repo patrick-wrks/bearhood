@@ -201,25 +201,25 @@
   }
 }
 
-/* Response button success pulse */
-@keyframes response-btn-pulse {
+/* Social action button pulse */
+@keyframes social-btn-pulse {
   0% {
     transform: scale(1);
   }
   40% {
-    transform: scale(1.05);
+    transform: scale(1.15);
   }
   100% {
     transform: scale(1);
   }
 }
 
-.response-btn-pulse {
-  animation: response-btn-pulse 0.22s ease-out;
+.social-btn-pulse {
+  animation: social-btn-pulse 0.3s ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .response-btn-pulse {
+  .social-btn-pulse {
     animation: none;
   }
 }

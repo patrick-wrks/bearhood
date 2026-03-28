@@ -2,7 +2,7 @@
 
 ## Project
 
-**Bearhood** — Social-first event web app (Resident Advisor-style): discover gay bear events, see **interested** / **going** counts, and save your own status when signed in.
+**Bearhood** — Social-first event web app (Resident Advisor-style): discover gay bear events, **like**, **comment**, and **bookmark** events when signed in.
 
 ## Current Status
 
@@ -12,14 +12,14 @@
 ## Primary Goals
 
 1. List upcoming events with hero, grid, and detail modal.
-2. Show aggregate **interested** and **attending (going)** counts per event.
-3. Let authenticated users set/clear their status (client-side Supabase).
+2. Show **like** counts and **comment** counts per event.
+3. Let authenticated users **like**, **comment on**, and **bookmark** events (client-side Supabase).
 4. Ship on **GitHub Pages** with optional Supabase env (demo data + demo counts when unset).
 
 ## Milestones
 
 1. **Done:** Email auth (sign up / log in / magic link / forgot + reset password), session via Supabase Auth.
-2. **Done:** `event_responses` integration with RLS (documented in README).
+2. **Done:** Social features (likes, comments, bookmarks) with RLS (documented in README).
 3. **Done:** EN/DE UI copy, EUR pricing, locale-aware dates, mobile nav sheet, loading/empty states.
 4. **Done:** Supabase project linked via CLI; schema migrations in `supabase/migrations/`.
 
@@ -27,14 +27,15 @@
 
 - Set `NEXT_PUBLIC_SITE_URL` **GitHub Actions secret** (value: `https://patrick-wrks.github.io/bearhood`).
 - Register redirect URLs in Supabase dashboard (see auth redirect setup below).
-- Apply new migration `20260328140000_events_rls.sql` via `supabase db push`.
+- Apply new migration `20260329120000_social_features.sql` via `supabase db push`.
 - Point Resident Advisor social URL to real Bearhood RA profile (`NEXT_PUBLIC_SOCIAL_RESIDENT_ADVISOR_URL` or edit `lib/social-links.ts`).
 - Optional: profiles table + username/avatar in UI.
 - Monitor Supabase quotas and add rate limits if needed.
 
 ## Progress Notes
 
-- **2026-03-28:** Auth modal + navbar user menu; `ResponseButtons` on cards and modal; `event_responses` helpers with demo fallbacks; skeleton/empty states; UI Foundation link removed from public nav.
+- **2026-03-29:** Replaced interested/going with like, comment, and bookmark features. New `event_likes`, `event_comments`, `event_bookmarks` tables + migration. `SocialActions` + `CommentSection` components.
+- **2026-03-28:** Auth modal + navbar user menu; social actions on cards and modal; skeleton/empty states; UI Foundation link removed from public nav.
 - **2026-03-28:** Added magic link sign-in, forgot password, and reset password flows. Added `NEXT_PUBLIC_SITE_URL` env var for redirect config.
 - **2026-03-28:** Pre-launch fixes — `NEXT_PUBLIC_SITE_URL` added to CI workflow; `events` table RLS migration; deduplicated response-sync logic; Open Graph + Twitter Card meta tags; dynamic `html lang` attribute synced to locale; `Toaster` mounted in providers; renamed `SponserLogo` → `SponsorLogo`; removed unused scaffolding files.
 
@@ -64,7 +65,7 @@ See `.env.local.example` for the full local setup template.
 
 ## Backlog / Ideas
 
-- Push / email reminders for events users marked "going".
+- Push / email reminders for bookmarked events.
 - Organizer dashboard (separate app or Supabase dashboard + RLS).
 - OAuth (Google/Apple) via Supabase.
 - List view / filters by tag or date.
@@ -95,3 +96,4 @@ See `.env.local.example` for the full local setup template.
 - `.github/workflows/deploy.yml`
 - `supabase/migrations/20260328120000_initial_schema.sql`
 - `supabase/migrations/20260328140000_events_rls.sql`
+- `supabase/migrations/20260329120000_social_features.sql`

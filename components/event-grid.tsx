@@ -2,18 +2,19 @@
 
 import type { CSSProperties, ReactNode } from "react";
 import { EventCard } from "@/components/event-card";
-import type { EventItem, EventResponseCounts, ResponseStatus } from "@/lib/types";
+import type { EventItem, EventSocialCounts } from "@/lib/types";
 import { useInViewOnce } from "@/lib/use-in-view-once";
 import { cn } from "@/lib/utils";
 
 type EventGridProps = {
   events: EventItem[];
   onSelectEvent: (event: EventItem) => void;
-  countsById: Record<string, EventResponseCounts>;
-  userResponses: Record<string, ResponseStatus>;
+  countsById: Record<string, EventSocialCounts>;
+  likedIds: Set<string>;
+  bookmarkedIds: Set<string>;
   userId: string | null;
   authConfigured: boolean;
-  onResponseUpdated: () => void | Promise<void>;
+  onSocialUpdated: () => void | Promise<void>;
 };
 
 function EventGridReveal({
@@ -52,10 +53,11 @@ export function EventGrid({
   events,
   onSelectEvent,
   countsById,
-  userResponses,
+  likedIds,
+  bookmarkedIds,
   userId,
   authConfigured,
-  onResponseUpdated,
+  onSocialUpdated,
 }: EventGridProps) {
   return (
     <>
@@ -69,11 +71,12 @@ export function EventGrid({
             <EventCard
               event={event}
               onSelect={onSelectEvent}
-              counts={countsById[event.id] ?? { interested: 0, attending: 0 }}
-              userResponse={userResponses[event.id] ?? null}
+              counts={countsById[event.id] ?? { likes: 0, comments: 0 }}
+              liked={likedIds.has(event.id)}
+              bookmarked={bookmarkedIds.has(event.id)}
               userId={userId}
               authConfigured={authConfigured}
-              onResponseUpdated={onResponseUpdated}
+              onSocialUpdated={onSocialUpdated}
             />
           </EventGridReveal>
         ))}
@@ -85,11 +88,12 @@ export function EventGrid({
             <EventCard
               event={event}
               onSelect={onSelectEvent}
-              counts={countsById[event.id] ?? { interested: 0, attending: 0 }}
-              userResponse={userResponses[event.id] ?? null}
+              counts={countsById[event.id] ?? { likes: 0, comments: 0 }}
+              liked={likedIds.has(event.id)}
+              bookmarked={bookmarkedIds.has(event.id)}
               userId={userId}
               authConfigured={authConfigured}
-              onResponseUpdated={onResponseUpdated}
+              onSocialUpdated={onSocialUpdated}
             />
           </EventGridReveal>
         ))}

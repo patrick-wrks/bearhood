@@ -3,34 +3,34 @@
 import { CalendarDays, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { EventItem, EventResponseCounts, ResponseStatus } from "@/lib/types";
+import type { EventItem, EventSocialCounts } from "@/lib/types";
 import { formatEventDate } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
-import { t } from "@/lib/i18n/messages";
-import { ResponseButtons } from "@/components/response-buttons";
+import { SocialActions } from "@/components/social-actions";
 import { cn } from "@/lib/utils";
 
 type EventCardProps = {
   event: EventItem;
   onSelect: (event: EventItem) => void;
-  counts: EventResponseCounts;
-  userResponse: ResponseStatus | null;
+  counts: EventSocialCounts;
+  liked: boolean;
+  bookmarked: boolean;
   userId: string | null;
   authConfigured: boolean;
-  onResponseUpdated: () => void | Promise<void>;
+  onSocialUpdated: () => void | Promise<void>;
 };
 
 export function EventCard({
   event,
   onSelect,
   counts,
-  userResponse,
+  liked,
+  bookmarked,
   userId,
   authConfigured,
-  onResponseUpdated,
+  onSocialUpdated,
 }: EventCardProps) {
   const locale = useLocale();
-  const statsLine = `${counts.interested} ${t(locale, "response.statInterested")} · ${counts.attending} ${t(locale, "response.statGoing")}`;
 
   return (
     <Card className="group flex h-full flex-col overflow-hidden border-border/80 bg-card/80 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/20">
@@ -52,16 +52,6 @@ export function EventCard({
             className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
-        </div>
-
-        <div className="border-b border-border/60 bg-muted/25 px-4 py-3">
-          <p
-            className="text-sm font-semibold tabular-nums text-foreground"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {statsLine}
-          </p>
         </div>
 
         <CardHeader className="pb-2">
@@ -89,20 +79,21 @@ export function EventCard({
         </CardContent>
       </button>
 
-      <CardContent className="border-t border-border/60 pt-4 pb-4">
+      <CardContent className="mt-auto border-t border-border/60 pt-3 pb-3">
         <div
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
           role="presentation"
         >
-          <ResponseButtons
+          <SocialActions
             eventId={event.id}
             counts={counts}
-            userResponse={userResponse}
+            liked={liked}
+            bookmarked={bookmarked}
             userId={userId}
             authConfigured={authConfigured}
-            compact
-            onUpdated={onResponseUpdated}
+            onUpdated={onSocialUpdated}
+            onCommentClick={() => onSelect(event)}
           />
         </div>
       </CardContent>

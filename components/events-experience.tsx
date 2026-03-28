@@ -6,24 +6,26 @@ import { HeroSlider } from "@/components/hero-slider";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { demoEvents, getEvents } from "@/lib/events";
-import type { EventItem, EventResponseCounts, ResponseStatus } from "@/lib/types";
+import type { EventItem, EventSocialCounts } from "@/lib/types";
 import { EventModal } from "@/components/event-modal";
 import { PartnersSection } from "@/components/partners-section";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import { useAuth } from "@/lib/auth-context";
 import {
-  getBulkEventResponseCounts,
-  getUserResponsesForEvents,
-} from "@/lib/event-responses";
+  getBulkEventSocialCounts,
+  getUserLikedEventIds,
+  getUserBookmarkedEventIds,
+} from "@/lib/event-social";
 
 export function EventsExperience() {
   const locale = useLocale();
   const { user, authConfigured } = useAuth();
   const [events, setEvents] = useState<EventItem[]>(demoEvents);
   const [eventsLoading, setEventsLoading] = useState(true);
-  const [countsById, setCountsById] = useState<Record<string, EventResponseCounts>>({});
-  const [userResponses, setUserResponses] = useState<Record<string, ResponseStatus>>({});
+  const [countsById, setCountsById] = useState<Record<string, EventSocialCounts>>({});
+  const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -32,21 +34,27 @@ export function EventsExperience() {
     setIsModalOpen(true);
   };
 
-  const syncResponses = useCallback(async (ids: string[]) => {
+  const syncSocial = useCallback(async (ids: string[]) => {
     if (ids.length === 0) {
       setCountsById({});
-      setUserResponses({});
+      setLikedIds(new Set());
+      setBookmarkedIds(new Set());
       return;
     }
 
-    const nextCounts = await getBulkEventResponseCounts(ids);
+    const nextCounts = await getBulkEventSocialCounts(ids);
     setCountsById(nextCounts);
 
     if (user?.id && authConfigured) {
-      const mine = await getUserResponsesForEvents(user.id, ids);
-      setUserResponses(mine);
+      const [liked, bookmarked] = await Promise.all([
+        getUserLikedEventIds(user.id, ids),
+        getUserBookmarkedEventIds(user.id, ids),
+      ]);
+      setLikedIds(liked);
+      setBookmarkedIds(bookmarked);
     } else {
-      setUserResponses({});
+      setLikedIds(new Set());
+      setBookmarkedIds(new Set());
     }
   }, [user, authConfigured]);
 
@@ -60,15 +68,15 @@ export function EventsExperience() {
       setEvents(fetchedEvents);
       setEventsLoading(false);
 
-      await syncResponses(fetchedEvents.map((e) => e.id));
+      await syncSocial(fetchedEvents.map((e) => e.id));
     })();
 
     return () => { cancelled = true; };
-  }, [syncResponses]);
+  }, [syncSocial]);
 
-  const handleResponseUpdated = useCallback(
-    () => syncResponses(events.map((e) => e.id)),
-    [events, syncResponses],
+  const handleSocialUpdated = useCallback(
+    () => syncSocial(events.map((e) => e.id)),
+    [events, syncSocial],
   );
 
   const empty = !eventsLoading && events.length === 0;
@@ -119,10 +127,11 @@ export function EventsExperience() {
             events={events}
             onSelectEvent={handleSelectEvent}
             countsById={countsById}
-            userResponses={userResponses}
+            likedIds={likedIds}
+            bookmarkedIds={bookmarkedIds}
             userId={user?.id ?? null}
             authConfigured={authConfigured}
-            onResponseUpdated={handleResponseUpdated}
+            onSocialUpdated={handleSocialUpdated}
           />
         )}
       </section>
@@ -134,13 +143,14 @@ export function EventsExperience() {
         onOpenChange={setIsModalOpen}
         counts={
           selectedEvent
-            ? (countsById[selectedEvent.id] ?? { interested: 0, attending: 0 })
-            : { interested: 0, attending: 0 }
+            ? (countsById[selectedEvent.id] ?? { likes: 0, comments: 0 })
+            : { likes: 0, comments: 0 }
         }
-        userResponse={selectedEvent ? (userResponses[selectedEvent.id] ?? null) : null}
+        liked={selectedEvent ? likedIds.has(selectedEvent.id) : false}
+        bookmarked={selectedEvent ? bookmarkedIds.has(selectedEvent.id) : false}
         userId={user?.id ?? null}
         authConfigured={authConfigured}
-        onResponseUpdated={handleResponseUpdated}
+        onSocialUpdated={handleSocialUpdated}
       />
     </>
   );

@@ -1,6 +1,6 @@
 # Bearhood - Social Media Event Brand Web App
 
-Bearhood is a social-first event website built with Next.js and Supabase. Users browse events (hero + grid + detail modal), see **how many people are interested vs. going**, and—when logged in—save their own status. Think **Resident Advisor–style** discovery with lightweight “social” signals.
+Bearhood is a social-first event website built with Next.js and Supabase. Users browse events (hero + grid + detail modal), **like** events, leave **comments**, and **bookmark** their favourites when logged in. Think **Resident Advisor–style** discovery with lightweight social signals.
 
 ## Stack
 
@@ -14,13 +14,13 @@ Bearhood is a social-first event website built with Next.js and Supabase. Users 
 ## Features
 
 - Hero slider for featured events, responsive event grid, event detail modal
-- **Interested** / **Going** counts on every card and in the modal; authenticated users can toggle (stored in `event_responses`)
+- **Like**, **comment**, and **bookmark** on every event; like and comment counts visible on cards and in the modal (stored in `event_likes`, `event_comments`, `event_bookmarks`)
 - Email **sign up / log in** (Supabase Auth)
 - EN/DE UI strings, EUR price formatting, locale-aware dates
 - Mobile slide-out navigation + auth entry points
 - Skeleton loading and empty state for events
 - Supabase-backed `events` with fallback **demo events** when env is missing or the query fails
-- Demo **response counts** when Supabase is not configured (static preview only)
+- Demo **social counts** and **comments** when Supabase is not configured (static preview only)
 
 ## Local setup
 
@@ -86,7 +86,7 @@ create table if not exists public.events (
 );
 ```
 
-The app maps rows to `EventItem` in [`lib/events.ts`](lib/events.ts). `event_responses.event_id` is **text** so it can match either a UUID string from Supabase or demo ids like `bearoke`.
+The app maps rows to `EventItem` in [`lib/events.ts`](lib/events.ts). Social table `event_id` columns are **text** so they can match either a UUID string from Supabase or demo ids like `bearoke`.
 
 ### Profiles (optional, for future avatar/username UI)
 
@@ -133,35 +133,41 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 ```
 
-### Event responses (interested / attending)
+### Event likes
 
 ```sql
-create table if not exists public.event_responses (
+create table if not exists public.event_likes (
   user_id uuid not null references auth.users(id) on delete cascade,
   event_id text not null,
-  status text not null check (status in ('interested', 'attending')),
   created_at timestamptz not null default now(),
   primary key (user_id, event_id)
 );
-
-alter table public.event_responses enable row level security;
-
-create policy "Anyone can read event responses"
-  on public.event_responses for select
-  using (true);
-
-create policy "Authenticated users insert own responses"
-  on public.event_responses for insert
-  with check (auth.uid() = user_id);
-
-create policy "Users update own responses"
-  on public.event_responses for update
-  using (auth.uid() = user_id);
-
-create policy "Users delete own responses"
-  on public.event_responses for delete
-  using (auth.uid() = user_id);
 ```
+
+### Event comments
+
+```sql
+create table if not exists public.event_comments (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  event_id text not null,
+  content text not null check (char_length(content) between 1 and 500),
+  created_at timestamptz not null default now()
+);
+```
+
+### Event bookmarks
+
+```sql
+create table if not exists public.event_bookmarks (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  event_id text not null,
+  created_at timestamptz not null default now(),
+  primary key (user_id, event_id)
+);
+```
+
+RLS policies for all three tables are defined in the migration `20260329120000_social_features.sql`.
 
 ### Example event seed
 
@@ -204,7 +210,7 @@ On each push to `main`, workflow `.github/workflows/deploy.yml`:
 ## Notes on static export
 
 - `next.config.ts` uses `output: "export"`, production `basePath` / `assetPrefix` for `/bearhood`, and `images.unoptimized: true`.
-- Event lists and response counts are loaded **in the browser** via Supabase.
-- If env vars are missing or queries fail, the app uses built-in demo events and demo response counts.
+- Event lists and social data (likes, comments, bookmarks) are loaded **in the browser** via Supabase.
+- If env vars are missing or queries fail, the app uses built-in demo events and demo social counts.
 
 See also [`Project.md`](Project.md) for status and verification checklist.

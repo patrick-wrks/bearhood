@@ -20,22 +20,24 @@ import {
 } from "@/components/ui/drawer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { EventItem, EventResponseCounts, ResponseStatus } from "@/lib/types";
+import type { EventItem, EventSocialCounts } from "@/lib/types";
 import { formatEventDate, formatEventPriceEur, formatEventTime } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
-import { ResponseButtons } from "@/components/response-buttons";
+import { SocialActions } from "@/components/social-actions";
+import { CommentSection } from "@/components/comment-section";
 import { useIsDesktop } from "@/lib/use-media-query";
 
 type EventModalProps = {
   event: EventItem | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  counts: EventResponseCounts;
-  userResponse: ResponseStatus | null;
+  counts: EventSocialCounts;
+  liked: boolean;
+  bookmarked: boolean;
   userId: string | null;
   authConfigured: boolean;
-  onResponseUpdated: () => void | Promise<void>;
+  onSocialUpdated: () => void | Promise<void>;
 };
 
 type EventModalBodyProps = {
@@ -45,15 +47,14 @@ type EventModalBodyProps = {
   setExpanded: (v: boolean | ((b: boolean) => boolean)) => void;
   needsReadMore: boolean;
   priceInfo: ReturnType<typeof formatEventPriceEur>;
-  counts: EventResponseCounts;
-  userResponse: ResponseStatus | null;
+  counts: EventSocialCounts;
+  liked: boolean;
+  bookmarked: boolean;
   userId: string | null;
   authConfigured: boolean;
-  onResponseUpdated: () => void | Promise<void>;
-  /** When true, omit bottom ticket buttons (shown in drawer footer). */
+  onSocialUpdated: () => void | Promise<void>;
   omitBottomActions?: boolean;
   imageClassName?: string;
-  /** When false, skip hero image (e.g. desktop dialog renders image + header separately). */
   includeImage?: boolean;
 };
 
@@ -65,10 +66,11 @@ function EventModalBody({
   needsReadMore,
   priceInfo,
   counts,
-  userResponse,
+  liked,
+  bookmarked,
   userId,
   authConfigured,
-  onResponseUpdated,
+  onSocialUpdated,
   omitBottomActions,
   imageClassName,
   includeImage = true,
@@ -142,13 +144,23 @@ function EventModalBody({
           ))}
         </div>
 
-        <ResponseButtons
+        <div className="rounded-lg border border-border/80 bg-muted/20 px-2 py-1">
+          <SocialActions
+            eventId={event.id}
+            counts={counts}
+            liked={liked}
+            bookmarked={bookmarked}
+            userId={userId}
+            authConfigured={authConfigured}
+            onUpdated={onSocialUpdated}
+          />
+        </div>
+
+        <CommentSection
           eventId={event.id}
-          counts={counts}
-          userResponse={userResponse}
           userId={userId}
           authConfigured={authConfigured}
-          onUpdated={onResponseUpdated}
+          onCommentAdded={onSocialUpdated}
         />
 
         {!omitBottomActions && (
@@ -186,10 +198,11 @@ export function EventModal({
   open,
   onOpenChange,
   counts,
-  userResponse,
+  liked,
+  bookmarked,
   userId,
   authConfigured,
-  onResponseUpdated,
+  onSocialUpdated,
 }: EventModalProps) {
   const locale = useLocale();
   const isDesktop = useIsDesktop();
@@ -254,10 +267,11 @@ export function EventModal({
               needsReadMore={needsReadMore}
               priceInfo={priceInfo}
               counts={counts}
-              userResponse={userResponse}
+              liked={liked}
+              bookmarked={bookmarked}
               userId={userId}
               authConfigured={authConfigured}
-              onResponseUpdated={onResponseUpdated}
+              onSocialUpdated={onSocialUpdated}
               omitBottomActions
               imageClassName="h-44 w-full rounded-lg object-cover"
             />
@@ -314,10 +328,11 @@ export function EventModal({
             needsReadMore={needsReadMore}
             priceInfo={priceInfo}
             counts={counts}
-            userResponse={userResponse}
+            liked={liked}
+            bookmarked={bookmarked}
             userId={userId}
             authConfigured={authConfigured}
-            onResponseUpdated={onResponseUpdated}
+            onSocialUpdated={onSocialUpdated}
             omitBottomActions={false}
             includeImage={false}
           />
