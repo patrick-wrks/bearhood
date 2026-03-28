@@ -8,6 +8,7 @@ import { formatEventDate } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import { ResponseButtons } from "@/components/response-buttons";
+import { cn } from "@/lib/utils";
 
 type EventCardProps = {
   event: EventItem;
@@ -35,36 +36,46 @@ export function EventCard({
     <Card className="group flex h-full flex-col overflow-hidden border-border/80 bg-card/80 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/20">
       <button
         type="button"
-        className="text-left"
+        className={cn(
+          "text-left",
+          "rounded-t-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        )}
         onClick={() => onSelect(event)}
         onKeyDown={(evt) => evt.key === "Enter" && onSelect(event)}
       >
         <div className="relative">
           <img
             src={event.imageUrl}
-            alt={event.title}
+            alt=""
+            loading="lazy"
+            decoding="async"
             className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-          <div className="absolute bottom-2 left-2 right-2">
-            <Badge variant="secondary" className="bg-black/50 text-xs text-white backdrop-blur-sm">
-              {statsLine}
-            </Badge>
-          </div>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
         </div>
 
-        <CardHeader>
+        <div className="border-b border-border/60 bg-muted/25 px-4 py-3">
+          <p
+            className="text-sm font-semibold tabular-nums text-foreground"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {statsLine}
+          </p>
+        </div>
+
+        <CardHeader className="pb-2">
           <CardTitle className="text-xl">{event.title}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 pb-4">
           <p className="line-clamp-2 text-sm text-muted-foreground">{event.shortDescription}</p>
           <div className="space-y-2 text-xs text-muted-foreground">
             <p className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-primary" />
+              <CalendarDays className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               {formatEventDate(event.date, locale)}
             </p>
             <p className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-primary" />
+              <MapPin className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               {event.location}
             </p>
           </div>

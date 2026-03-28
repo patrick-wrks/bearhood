@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -27,45 +28,13 @@ import { t } from "@/lib/i18n/messages";
 import { useAuth } from "@/lib/auth-context";
 import { useAuthModal } from "@/lib/auth-modal-context";
 import type { Locale } from "@/lib/i18n/locales";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 function userInitials(email: string | undefined): string {
   if (!email) return "?";
   const part = email.split("@")[0] ?? email;
   return part.slice(0, 2).toUpperCase();
-}
-
-type NavbarNavLinksProps = {
-  locale: Locale;
-  homeHref: string;
-  onNavigate?: () => void;
-};
-
-function NavbarNavLinks({ locale, homeHref, onNavigate }: NavbarNavLinksProps) {
-  return (
-    <>
-      <a
-        href={`${homeHref}#events`}
-        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-        onClick={onNavigate}
-      >
-        {t(locale, "navbar.events")}
-      </a>
-      <a
-        href={`${homeHref}#about`}
-        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-        onClick={onNavigate}
-      >
-        {t(locale, "navbar.about")}
-      </a>
-      <a
-        href={`${homeHref}#contact`}
-        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-        onClick={onNavigate}
-      >
-        {t(locale, "navbar.contact")}
-      </a>
-    </>
-  );
 }
 
 type NavbarLanguageSwitchProps = {
@@ -122,6 +91,47 @@ function NavbarLanguageSwitch({
   );
 }
 
+function NavbarThemeToggle({ locale }: { locale: Locale }) {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Button
+        type="button"
+        variant="outline"
+        size="icon-sm"
+        className="rounded-full"
+        disabled
+        aria-hidden
+      >
+        <Sun className="h-4 w-4 opacity-40" />
+      </Button>
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="icon-sm"
+      className="rounded-full"
+      aria-label={t(locale, "navbar.themeToggle")}
+      aria-pressed={isDark}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+    >
+      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </Button>
+  );
+}
+
 export function Navbar() {
   const locale = useLocale();
   const pathSansLocalePrefix = useLocalePathSansPrefix();
@@ -133,6 +143,9 @@ export function Navbar() {
   const enHref = `/en${rest}`;
   const deHref = `/de${rest}`;
   const homeHref = `/${locale}`;
+  const eventsHref = `${homeHref}#events`;
+  const aboutHref = `${homeHref}#about`;
+  const contactHref = `${homeHref}#contact`;
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -160,13 +173,13 @@ export function Navbar() {
             />
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            <NavbarNavLinks locale={locale} homeHref={homeHref} />
-          </nav>
-
           <div className="flex items-center gap-2">
             <div className="hidden md:block">
               <NavbarLanguageSwitch locale={locale} enHref={enHref} deHref={deHref} />
+            </div>
+
+            <div className="hidden md:block">
+              <NavbarThemeToggle locale={locale} />
             </div>
 
             {!loading && user ? (
@@ -231,12 +244,37 @@ export function Navbar() {
           <SheetHeader>
             <SheetTitle>{t(locale, "navbar.mobileMenuTitle")}</SheetTitle>
           </SheetHeader>
-          <nav className="flex flex-col gap-4">
-            <NavbarNavLinks
-              locale={locale}
-              homeHref={homeHref}
-              onNavigate={closeMobile}
-            />
+          <nav className="flex flex-col gap-1" aria-label={t(locale, "navbar.mobileMenuTitle")}>
+            <Link
+              href={eventsHref}
+              onClick={closeMobile}
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "default" }),
+                "h-12 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+              )}
+            >
+              {t(locale, "navbar.events")}
+            </Link>
+            <Link
+              href={aboutHref}
+              onClick={closeMobile}
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "default" }),
+                "h-12 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+              )}
+            >
+              {t(locale, "navbar.about")}
+            </Link>
+            <Link
+              href={contactHref}
+              onClick={closeMobile}
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "default" }),
+                "h-12 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+              )}
+            >
+              {t(locale, "navbar.contact")}
+            </Link>
           </nav>
           <div className="flex flex-col gap-2">
             <p className="text-xs font-medium text-muted-foreground">
@@ -249,6 +287,10 @@ export function Navbar() {
               vertical
               onNavigate={closeMobile}
             />
+          </div>
+          <div className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/15 px-4 py-3">
+            <span className="text-sm font-medium text-foreground">{t(locale, "navbar.appearance")}</span>
+            <NavbarThemeToggle locale={locale} />
           </div>
           <div className="mt-auto border-t border-border pt-4">
             {!loading && user ? (

@@ -3,8 +3,10 @@ import { AboutSection } from "@/components/about-section";
 
 export default function Home() {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-16 pt-8 md:px-6">
-      <EventsExperience />
+    <div className="flex flex-col pb-16">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-8 md:px-6 md:pt-10">
+        <EventsExperience />
+      </div>
       <AboutSection />
     </div>
   );

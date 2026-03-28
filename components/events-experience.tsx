@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { demoEvents, getEvents } from "@/lib/events";
 import type { EventItem, EventResponseCounts, ResponseStatus } from "@/lib/types";
 import { EventModal } from "@/components/event-modal";
+import { PartnersSection } from "@/components/partners-section";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import { useAuth } from "@/lib/auth-context";
@@ -31,27 +32,7 @@ export function EventsExperience() {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadEvents = async () => {
-      setEventsLoading(true);
-      const fetchedEvents = await getEvents();
-      if (isMounted) {
-        setEvents(fetchedEvents);
-        setEventsLoading(false);
-      }
-    };
-
-    void loadEvents();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const syncResponses = useCallback(async () => {
-    const ids = events.map((e) => e.id);
+  const syncResponses = useCallback(async (ids: string[]) => {
     if (ids.length === 0) {
       setCountsById({});
       setUserResponses({});
@@ -67,62 +48,61 @@ export function EventsExperience() {
     } else {
       setUserResponses({});
     }
-  }, [events, user, authConfigured]);
+  }, [user, authConfigured]);
 
   useEffect(() => {
-    const ac = new AbortController();
+    let cancelled = false;
 
     void (async () => {
-      const ids = events.map((e) => e.id);
-      if (ids.length === 0) {
-        if (!ac.signal.aborted) {
-          setCountsById({});
-          setUserResponses({});
-        }
-        return;
-      }
+      setEventsLoading(true);
+      const fetchedEvents = await getEvents();
+      if (cancelled) return;
+      setEvents(fetchedEvents);
+      setEventsLoading(false);
 
-      const nextCounts = await getBulkEventResponseCounts(ids);
-      if (ac.signal.aborted) return;
-      setCountsById(nextCounts);
-
-      if (user?.id && authConfigured) {
-        const mine = await getUserResponsesForEvents(user.id, ids);
-        if (ac.signal.aborted) return;
-        setUserResponses(mine);
-      } else if (!ac.signal.aborted) {
-        setUserResponses({});
-      }
+      await syncResponses(fetchedEvents.map((e) => e.id));
     })();
 
-    return () => ac.abort();
-  }, [events, user, authConfigured]);
+    return () => { cancelled = true; };
+  }, [syncResponses]);
+
+  const handleResponseUpdated = useCallback(
+    () => syncResponses(events.map((e) => e.id)),
+    [events, syncResponses],
+  );
 
   const empty = !eventsLoading && events.length === 0;
 
   return (
     <>
-      {eventsLoading ? (
-        <div className="space-y-4">
-          <Skeleton className="h-[min(56vh,520px)] w-full rounded-2xl" />
-          <div className="flex justify-center gap-2">
-            <Skeleton className="h-2.5 w-2.5 rounded-full" />
-            <Skeleton className="h-2.5 w-8 rounded-full" />
-            <Skeleton className="h-2.5 w-2.5 rounded-full" />
+      <section
+        className="-mx-4 rounded-2xl bg-muted/35 px-4 py-10 md:-mx-0 md:px-6 md:py-14"
+        aria-label={t(locale, "events.heroSectionLabel")}
+      >
+        {eventsLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-[min(40vh,280px)] w-full rounded-2xl md:h-[min(56vh,520px)]" />
+            <div className="flex justify-center gap-2">
+              <Skeleton className="h-2.5 w-2.5 rounded-full" />
+              <Skeleton className="h-2.5 w-8 rounded-full" />
+              <Skeleton className="h-2.5 w-2.5 rounded-full" />
+            </div>
           </div>
-        </div>
-      ) : empty ? null : (
-        <HeroSlider events={events} onExploreEvent={handleSelectEvent} />
-      )}
+        ) : empty ? null : (
+          <HeroSlider events={events} onExploreEvent={handleSelectEvent} />
+        )}
+      </section>
 
-      <section id="events" className="space-y-4">
+      <PartnersSection />
+
+      <section id="events" className="mt-12 space-y-4 md:mt-20 md:space-y-5">
         <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
           {t(locale, "events.upcomingParties")}
         </h2>
         <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
           {t(locale, "events.upcomingPartiesDescription")}
         </p>
-        <Separator className="my-4" />
+        <Separator className="my-4 md:my-6" />
 
         {eventsLoading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -142,7 +122,7 @@ export function EventsExperience() {
             userResponses={userResponses}
             userId={user?.id ?? null}
             authConfigured={authConfigured}
-            onResponseUpdated={syncResponses}
+            onResponseUpdated={handleResponseUpdated}
           />
         )}
       </section>
@@ -160,7 +140,7 @@ export function EventsExperience() {
         userResponse={selectedEvent ? (userResponses[selectedEvent.id] ?? null) : null}
         userId={user?.id ?? null}
         authConfigured={authConfigured}
-        onResponseUpdated={syncResponses}
+        onResponseUpdated={handleResponseUpdated}
       />
     </>
   );

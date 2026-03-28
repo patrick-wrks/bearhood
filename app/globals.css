@@ -128,3 +128,77 @@
     @apply font-sans;
   }
 }
+
+/* Hero carousel autoplay progress (duration set via --hero-autoplay-ms on element) */
+@keyframes hero-autoplay-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.hero-autoplay-bar-fill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  animation: hero-autoplay-progress var(--hero-autoplay-ms, 5000ms) linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-autoplay-bar-fill {
+    animation: none;
+    transform: scaleX(1);
+    opacity: 0.35;
+  }
+}
+
+/* Event grid scroll-reveal (stagger via style / nth-child) */
+@keyframes event-card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.event-card-reveal-ready {
+  animation: event-card-reveal 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-card-reveal-ready {
+    animation: none;
+    animation-delay: 0ms;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Response button success pulse */
+@keyframes response-btn-pulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.response-btn-pulse {
+  animation: response-btn-pulse 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .response-btn-pulse {
+    animation: none;
+  }
+}

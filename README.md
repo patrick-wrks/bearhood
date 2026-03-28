@@ -47,7 +47,7 @@ Open `http://localhost:3000`.
 ### Auth & social URLs
 
 - In the Supabase dashboard, enable **Email** under Authentication → Providers.
-- Optional: set `NEXT_PUBLIC_SOCIAL_INSTAGRAM_URL`, `NEXT_PUBLIC_SOCIAL_YOUTUBE_URL`, `NEXT_PUBLIC_SOCIAL_TIKTOK_URL` for footer links (see `.env.local.example`).
+- Optional: set `NEXT_PUBLIC_SOCIAL_INSTAGRAM_URL`, `NEXT_PUBLIC_SOCIAL_FACEBOOK_URL`, `NEXT_PUBLIC_SOCIAL_EVENTBRITE_URL`, `NEXT_PUBLIC_SOCIAL_RESIDENT_ADVISOR_URL` for footer links (see `.env.local.example`).
 
 ## Supabase schema
 

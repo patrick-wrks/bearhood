@@ -13,11 +13,18 @@ export const MESSAGES = {
     "navbar.account": "Account",
     "navbar.mobileMenu": "Menu",
     "navbar.mobileMenuTitle": "Navigation",
+    "navbar.appearance": "Appearance",
+    "navbar.themeToggle": "Toggle light or dark mode",
 
+    "hero.carouselLabel": "Featured events",
+    "hero.slidePickerLabel": "Choose featured event slide",
     "hero.featuredEvent": "Featured Event",
     "hero.exploreEvent": "Explore Event",
     "hero.goToSlide": "Go to slide",
 
+    "events.heroSectionLabel": "Featured events",
+    "events.partners": "Partners",
+    "events.partnersSectionLabel": "Partner logos",
     "events.upcomingParties": "Upcoming Parties",
     "events.upcomingPartiesDescription":
       "Discover the next wave of Bearhood experiences. Tap any event card to view details, lineups, and attendance info.",
@@ -32,10 +39,17 @@ export const MESSAGES = {
     "about.title": "About Bearhood",
     "about.body":
       "Bearhood is a social-first event brand blending music, storytelling, and community into immersive nights. We design playful yet sleek experiences that people remember.",
+    "about.followCta": "Follow on Instagram",
+    "about.followHint": "Drops, lineups, and behind-the-scenes.",
 
     "footer.tagline": "Built for unforgettable event experiences.",
     "footer.copyright": "All rights reserved.",
+    "footer.socialInstagram": "Bearhood on Instagram",
+    "footer.socialFacebook": "Bearhood on Facebook",
+    "footer.socialEventbrite": "Bearhood on Eventbrite",
+    "footer.socialResidentAdvisor": "Bearhood on Resident Advisor",
 
+    "eventModal.close": "Close",
     "eventModal.readMore": "Read more",
     "eventModal.showLess": "Show less",
     "eventModal.getTickets": "Get Tickets",
@@ -95,11 +109,18 @@ export const MESSAGES = {
     "navbar.account": "Konto",
     "navbar.mobileMenu": "Menü",
     "navbar.mobileMenuTitle": "Navigation",
+    "navbar.appearance": "Darstellung",
+    "navbar.themeToggle": "Hell- oder Dunkelmodus umschalten",
 
+    "hero.carouselLabel": "Hervorgehobene Events",
+    "hero.slidePickerLabel": "Folie des Featured-Events wählen",
     "hero.featuredEvent": "Hervorgehobenes Event",
     "hero.exploreEvent": "Event ansehen",
     "hero.goToSlide": "Zu Folie",
 
+    "events.heroSectionLabel": "Hervorgehobene Events",
+    "events.partners": "Partner",
+    "events.partnersSectionLabel": "Partner-Logos",
     "events.upcomingParties": "Bevorstehende Partys",
     "events.upcomingPartiesDescription":
       "Entdecke die nächste Welle von Bearhood-Erlebnissen. Tippe auf eine Event-Karte, um Details, Line-Ups und Infos zur Teilnahme zu sehen.",
@@ -114,10 +135,17 @@ export const MESSAGES = {
     "about.title": "Über Bearhood",
     "about.body":
       "Bearhood ist eine Social-First-Eventmarke, die Musik, Storytelling und Community zu eindrucksvollen Abenden verbindet. Wir gestalten verspielte, aber cleane Erlebnisse, die man nicht vergisst.",
+    "about.followCta": "Auf Instagram folgen",
+    "about.followHint": "Drops, Line-ups und Einblicke hinter die Kulissen.",
 
     "footer.tagline": "Für unvergessliche Event-Erlebnisse gebaut.",
     "footer.copyright": "Alle Rechte vorbehalten.",
+    "footer.socialInstagram": "Bearhood auf Instagram",
+    "footer.socialFacebook": "Bearhood auf Facebook",
+    "footer.socialEventbrite": "Bearhood auf Eventbrite",
+    "footer.socialResidentAdvisor": "Bearhood auf Resident Advisor",
 
+    "eventModal.close": "Schließen",
     "eventModal.readMore": "Weiterlesen",
     "eventModal.showLess": "Weniger anzeigen",
     "eventModal.getTickets": "Tickets holen",

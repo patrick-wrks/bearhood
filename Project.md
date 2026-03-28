@@ -25,9 +25,10 @@
 
 ## Roadmap (next 1-2 weeks)
 
-- Configure `NEXT_PUBLIC_SITE_URL` GitHub Actions secret (see below).
-- Register redirect URLs in Supabase dashboard (see below).
-- Point footer social URLs to real Bearhood profiles (`NEXT_PUBLIC_SOCIAL_*` or edit `lib/social-links.ts`).
+- Set `NEXT_PUBLIC_SITE_URL` **GitHub Actions secret** (value: `https://patrick-wrks.github.io/bearhood`).
+- Register redirect URLs in Supabase dashboard (see auth redirect setup below).
+- Apply new migration `20260328140000_events_rls.sql` via `supabase db push`.
+- Point Resident Advisor social URL to real Bearhood RA profile (`NEXT_PUBLIC_SOCIAL_RESIDENT_ADVISOR_URL` or edit `lib/social-links.ts`).
 - Optional: profiles table + username/avatar in UI.
 - Monitor Supabase quotas and add rate limits if needed.
 
@@ -35,6 +36,7 @@
 
 - **2026-03-28:** Auth modal + navbar user menu; `ResponseButtons` on cards and modal; `event_responses` helpers with demo fallbacks; skeleton/empty states; UI Foundation link removed from public nav.
 - **2026-03-28:** Added magic link sign-in, forgot password, and reset password flows. Added `NEXT_PUBLIC_SITE_URL` env var for redirect config.
+- **2026-03-28:** Pre-launch fixes — `NEXT_PUBLIC_SITE_URL` added to CI workflow; `events` table RLS migration; deduplicated response-sync logic; Open Graph + Twitter Card meta tags; dynamic `html lang` attribute synced to locale; `Toaster` mounted in providers; renamed `SponserLogo` → `SponsorLogo`; removed unused scaffolding files.
 
 ## Auth email redirect setup (required once per environment)
 
@@ -79,8 +81,10 @@ See `.env.local.example` for the full local setup template.
 - [x] `npm run build` succeeds
 - [x] `npm run lint` passes (img-element warnings acceptable for remote/dynamic URLs)
 - [x] GitHub Actions secrets for Supabase (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) — **configured on the repo**
-- [ ] `NEXT_PUBLIC_SITE_URL` added as GitHub Actions secret (`https://patrick-wrks.github.io/bearhood`)
-- [ ] Supabase dashboard → redirect URLs registered for local + production
+- [x] `NEXT_PUBLIC_SITE_URL` added to `deploy.yml`
+- [x] `events` table RLS + public select policy applied via `supabase db push`
+- [x] `NEXT_PUBLIC_SITE_URL` secret set in GitHub Actions
+- [x] Supabase dashboard → redirect URLs registered for local + production
 - [ ] Deployed output renders correctly on GitHub Pages (`/bearhood` base path)
 - [ ] Auth flows tested end-to-end: sign up, log in, magic link, forgot + reset password
 
@@ -90,3 +94,4 @@ See `.env.local.example` for the full local setup template.
 - `.env.local.example`
 - `.github/workflows/deploy.yml`
 - `supabase/migrations/20260328120000_initial_schema.sql`
+- `supabase/migrations/20260328140000_events_rls.sql`

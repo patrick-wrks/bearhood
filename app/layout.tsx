@@ -12,9 +12,25 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://patrick-wrks.github.io/bearhood";
+
 export const metadata: Metadata = {
   title: "Bearhood | Social Media Event Brand",
   description: "Explore upcoming Bearhood events, festival drops, and community socials.",
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    title: "Bearhood | Social Media Event Brand",
+    description: "Discover the next wave of bear community events — parties, socials, and immersive nights.",
+    url: siteUrl,
+    siteName: "Bearhood",
+    locale: "en",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Bearhood | Social Media Event Brand",
+    description: "Discover the next wave of bear community events — parties, socials, and immersive nights.",
+  },
   icons: {
     icon: {
       url: "/favicon.png",
@@ -38,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html lang="en" className={`${poppins.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full font-sans">
         <AppProviders>
           <div className="flex min-h-screen flex-col">
