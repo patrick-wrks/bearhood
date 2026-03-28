@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import logo from "@BearhoodAssets/Logo.png";
+import textLogo from "@BearhoodAssets/bearhood-textbased-Logo.webp";
 import { useLocale, useLocalePathSansPrefix } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import { useAuth } from "@/lib/auth-context";
@@ -151,7 +152,12 @@ export function Navbar() {
               priority
               className="h-7 w-7"
             />
-            <span>BEARHOOD</span>
+            <Image
+              src={textLogo}
+              alt="Bearhood"
+              height={20}
+              className="h-5 w-auto"
+            />
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex">
