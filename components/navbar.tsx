@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -129,6 +130,7 @@ function NavbarThemeToggle({ locale }: { locale: Locale }) {
 export function Navbar() {
   const locale = useLocale();
   const pathSansLocalePrefix = useLocalePathSansPrefix();
+  const router = useRouter();
   const { user, loading, signOut } = useAuth();
   const { openAuthModal } = useAuthModal();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -141,6 +143,7 @@ export function Navbar() {
   const eventsHref = `${homeHref}#events`;
   const aboutHref = `${homeHref}#about`;
   const contactHref = `${homeHref}#contact`;
+  const accountHref = `/${locale}/account`;
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
@@ -207,6 +210,10 @@ export function Navbar() {
                 <DropdownMenuLabel className="truncate font-normal">
                   {user.email}
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push(accountHref)}>
+                  {t(locale, "navbar.account")}
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   variant="destructive"
@@ -299,18 +306,29 @@ export function Navbar() {
 
             <div className="mt-4">
               {!loading && user ? (
-                <div className="flex items-center gap-3">
-                  <p className="min-w-0 flex-1 truncate text-sm text-muted-foreground">{user.email}</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      void signOut();
-                      closeMobile();
-                    }}
-                  >
-                    {t(locale, "navbar.signOut")}
-                  </Button>
+                <div className="space-y-3">
+                  <p className="truncate text-sm text-muted-foreground">{user.email}</p>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={accountHref}
+                      onClick={closeMobile}
+                      className={cn(
+                        buttonVariants({ variant: "outline", size: "sm" }),
+                      )}
+                    >
+                      {t(locale, "navbar.account")}
+                    </Link>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        void signOut();
+                        closeMobile();
+                      }}
+                    >
+                      {t(locale, "navbar.signOut")}
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <Button

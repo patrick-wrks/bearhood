@@ -99,6 +99,20 @@ export const MESSAGES = {
     "events.loading": "Loading events…",
     "events.empty": "No upcoming events right now. Check back soon.",
 
+    "account.title": "Account",
+    "account.description": "Manage your profile details.",
+    "account.displayName": "Display name",
+    "account.displayNamePlaceholder": "Your name",
+    "account.profilePicture": "Profile picture",
+    "account.uploadPhoto": "Upload photo",
+    "account.removePhoto": "Remove",
+    "account.save": "Save changes",
+    "account.saving": "Saving…",
+    "account.saved": "Profile updated!",
+    "account.error": "Could not save. Try again.",
+    "account.notSignedIn": "Sign in to manage your account.",
+    "account.avatarHint": "JPG, PNG or WebP. Max 2 MB.",
+
     "a11y.skipToContent": "Skip to content",
   },
   de: {
@@ -198,6 +212,20 @@ export const MESSAGES = {
 
     "events.loading": "Events werden geladen…",
     "events.empty": "Derzeit keine anstehenden Events. Schau bald wieder vorbei.",
+
+    "account.title": "Konto",
+    "account.description": "Verwalte deine Profildaten.",
+    "account.displayName": "Anzeigename",
+    "account.displayNamePlaceholder": "Dein Name",
+    "account.profilePicture": "Profilbild",
+    "account.uploadPhoto": "Foto hochladen",
+    "account.removePhoto": "Entfernen",
+    "account.save": "Änderungen speichern",
+    "account.saving": "Speichern…",
+    "account.saved": "Profil aktualisiert!",
+    "account.error": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+    "account.notSignedIn": "Melde dich an, um dein Konto zu verwalten.",
+    "account.avatarHint": "JPG, PNG oder WebP. Max. 2 MB.",
 
     "a11y.skipToContent": "Zum Inhalt springen",
   },

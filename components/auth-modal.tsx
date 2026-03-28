@@ -485,34 +485,44 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         </TabsContent>
 
         <TabsContent value="signup" className="mt-4 space-y-4">
-          <form onSubmit={handleSignup} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="signup-email">{t(locale, "auth.email")}</Label>
-              <Input
-                id="signup-email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(ev) => setEmail(ev.target.value)}
-                required
-              />
+          {info ? (
+            <div className="flex flex-col items-center gap-4 py-6 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <p className="text-sm text-muted-foreground">{info}</p>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="signup-password">{t(locale, "auth.password")}</Label>
-              <PasswordInput
-                id="signup-password"
-                locale={locale}
-                autoComplete="new-password"
-                value={password}
-                onChange={(ev) => setPassword(ev.target.value)}
-              />
-            </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            {info && <p className="text-sm text-muted-foreground">{info}</p>}
-            <Button type="submit" className="h-11 w-full" disabled={submitting}>
-              {t(locale, "auth.submitSignup")}
-            </Button>
-          </form>
+          ) : (
+            <form onSubmit={handleSignup} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="signup-email">{t(locale, "auth.email")}</Label>
+                <Input
+                  id="signup-email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(ev) => setEmail(ev.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password">{t(locale, "auth.password")}</Label>
+                <PasswordInput
+                  id="signup-password"
+                  locale={locale}
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(ev) => setPassword(ev.target.value)}
+                />
+              </div>
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              <Button type="submit" className="h-11 w-full" disabled={submitting}>
+                {t(locale, "auth.submitSignup")}
+              </Button>
+            </form>
+          )}
         </TabsContent>
       </Tabs>
     </AuthResponsiveShell>
