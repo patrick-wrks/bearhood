@@ -75,7 +75,7 @@ export function ResponseButtons({
             size="sm"
             variant={userResponse === "interested" ? "default" : "outline"}
             disabled={busy || !canMutate}
-            className="h-8 text-xs"
+            className="text-xs"
             onClick={() => void handleStatus("interested")}
           >
             {busy ? t(locale, "response.updating") : t(locale, "response.interested")}
@@ -85,7 +85,7 @@ export function ResponseButtons({
             size="sm"
             variant={userResponse === "attending" ? "default" : "outline"}
             disabled={busy || !canMutate}
-            className="h-8 text-xs"
+            className="text-xs"
             onClick={() => void handleStatus("attending")}
           >
             {busy ? t(locale, "response.updating") : t(locale, "response.attending")}
