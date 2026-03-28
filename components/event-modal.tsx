@@ -11,19 +11,36 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { EventItem } from "@/lib/types";
-import { formatEventDate, formatEventTime } from "@/lib/utils";
+import type { EventItem, EventResponseCounts, ResponseStatus } from "@/lib/types";
+import { formatEventDate, formatEventPriceEur, formatEventTime } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n/use-locale";
+import { t } from "@/lib/i18n/messages";
+import { ResponseButtons } from "@/components/response-buttons";
 
 type EventModalProps = {
   event: EventItem | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  counts: EventResponseCounts;
+  userResponse: ResponseStatus | null;
+  userId: string | null;
+  authConfigured: boolean;
+  onResponseUpdated: () => void | Promise<void>;
 };
 
-export function EventModal({ event, open, onOpenChange }: EventModalProps) {
+export function EventModal({
+  event,
+  open,
+  onOpenChange,
+  counts,
+  userResponse,
+  userId,
+  authConfigured,
+  onResponseUpdated,
+}: EventModalProps) {
+  const locale = useLocale();
   const descriptionText = useMemo(() => {
     if (!event) return "";
-    // Supabase/demo content may include <br> tags. Convert them to real line breaks.
     return event.description.replace(/<br\s*\/?>/gi, "\n");
   }, [event]);
 
@@ -35,6 +52,7 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
 
   const ticketUrl = event.ticketUrl;
   const learnMoreUrl = event.learnMoreUrl ?? event.ticketUrl;
+  const priceInfo = formatEventPriceEur(locale, event.price);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -68,7 +86,7 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
                 className="text-sm font-medium text-foreground/90 underline underline-offset-4 hover:text-foreground"
                 onClick={() => setExpanded((v) => !v)}
               >
-                {expanded ? "Show less" : "Read more"}
+                {expanded ? t(locale, "eventModal.showLess") : t(locale, "eventModal.readMore")}
               </button>
             )}
           </div>
@@ -76,15 +94,24 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
           <div className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
             <p className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-primary" />
-              {formatEventDate(event.date)} {formatEventTime(event.date)}
+              {formatEventDate(event.date, locale)} {formatEventTime(event.date, locale)}
             </p>
             <p className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
               {event.location}
             </p>
-            <p className="flex items-center gap-2">
+            <p className="flex items-center gap-2 sm:col-span-2">
               <Ticket className="h-4 w-4 text-primary" />
-              ${event.price} - Capacity {event.capacity}
+              {priceInfo.isFree ? (
+                <>
+                  {t(locale, "eventModal.free")} · {t(locale, "eventModal.capacity")}{" "}
+                  {event.capacity}
+                </>
+              ) : (
+                <>
+                  {priceInfo.formatted} · {t(locale, "eventModal.capacity")} {event.capacity}
+                </>
+              )}
             </p>
           </div>
 
@@ -96,6 +123,15 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
             ))}
           </div>
 
+          <ResponseButtons
+            eventId={event.id}
+            counts={counts}
+            userResponse={userResponse}
+            userId={userId}
+            authConfigured={authConfigured}
+            onUpdated={onResponseUpdated}
+          />
+
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button
               className="sm:flex-1"
@@ -105,7 +141,7 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
                 window.open(ticketUrl, "_blank", "noopener,noreferrer");
               }}
             >
-              Get Tickets
+              {t(locale, "eventModal.getTickets")}
             </Button>
             <Button
               variant="outline"
@@ -116,7 +152,7 @@ export function EventModal({ event, open, onOpenChange }: EventModalProps) {
                 window.open(learnMoreUrl, "_blank", "noopener,noreferrer");
               }}
             >
-              Learn More
+              {t(locale, "eventModal.learnMore")}
             </Button>
           </div>
         </div>

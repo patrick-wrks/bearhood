@@ -12,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import type { EventItem } from "@/lib/types";
 import { formatEventDate } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n/use-locale";
+import { t } from "@/lib/i18n/messages";
 
 type HeroSliderProps = {
   events: EventItem[];
@@ -19,6 +21,7 @@ type HeroSliderProps = {
 };
 
 export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
+  const locale = useLocale();
   const featuredEvents = events.filter((event) => event.isFeatured).slice(0, 5);
   const plugin = React.useRef(
     Autoplay({
@@ -75,7 +78,7 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
                 <div className="absolute inset-0 flex items-end p-6 md:p-10">
                   <div className="max-w-2xl space-y-4">
                     <p className="inline-flex rounded-full border border-white/50 bg-black/60 px-3 py-1 text-xs font-medium text-white">
-                      Featured Event
+                      {t(locale, "hero.featuredEvent")}
                     </p>
                     <h1 className="text-3xl font-bold tracking-tight text-white md:text-5xl">
                       {event.title}
@@ -84,7 +87,7 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
                     <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-200 md:text-sm">
                       <p className="flex items-center gap-2">
                         <CalendarDays className="h-4 w-4 text-white" />
-                        {formatEventDate(event.date)}
+                        {formatEventDate(event.date, locale)}
                       </p>
                       <p className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-white" />
@@ -96,7 +99,7 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
                       type="button"
                       onClick={() => onExploreEvent(event)}
                     >
-                      Explore Event
+                      {t(locale, "hero.exploreEvent")}
                     </Button>
                   </div>
                 </div>
@@ -114,7 +117,7 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
             <button
               key={i}
               type="button"
-              aria-label={`Go to slide ${i + 1}`}
+              aria-label={`${t(locale, "hero.goToSlide")} ${i + 1}`}
               aria-current={isActive ? "true" : undefined}
               className={[
                 "h-2.5 w-2.5 rounded-full border border-white/70 transition-all duration-300",

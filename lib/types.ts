@@ -1,3 +1,10 @@
+export type ResponseStatus = "interested" | "attending";
+
+export type EventResponseCounts = {
+  interested: number;
+  attending: number;
+};
+
 export type EventItem = {
   id: string;
   title: string;

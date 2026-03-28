@@ -1,51 +1,279 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { Menu } from "lucide-react";
 import Link from "next/link";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import logo from "@BearhoodAssets/Logo.png";
+import { useLocale, useLocalePathSansPrefix } from "@/lib/i18n/use-locale";
+import { t } from "@/lib/i18n/messages";
+import { useAuth } from "@/lib/auth-context";
+import { useAuthModal } from "@/lib/auth-modal-context";
+import type { Locale } from "@/lib/i18n/locales";
+
+function userInitials(email: string | undefined): string {
+  if (!email) return "?";
+  const part = email.split("@")[0] ?? email;
+  return part.slice(0, 2).toUpperCase();
+}
+
+type NavbarNavLinksProps = {
+  locale: Locale;
+  homeHref: string;
+  onNavigate?: () => void;
+};
+
+function NavbarNavLinks({ locale, homeHref, onNavigate }: NavbarNavLinksProps) {
+  return (
+    <>
+      <a
+        href={`${homeHref}#events`}
+        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+        onClick={onNavigate}
+      >
+        {t(locale, "navbar.events")}
+      </a>
+      <a
+        href={`${homeHref}#about`}
+        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+        onClick={onNavigate}
+      >
+        {t(locale, "navbar.about")}
+      </a>
+      <a
+        href={`${homeHref}#contact`}
+        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+        onClick={onNavigate}
+      >
+        {t(locale, "navbar.contact")}
+      </a>
+    </>
+  );
+}
+
+type NavbarLanguageSwitchProps = {
+  locale: Locale;
+  enHref: string;
+  deHref: string;
+  vertical?: boolean;
+  onNavigate?: () => void;
+};
+
+function NavbarLanguageSwitch({
+  locale,
+  enHref,
+  deHref,
+  vertical,
+  onNavigate,
+}: NavbarLanguageSwitchProps) {
+  return (
+    <div
+      className={[
+        "flex rounded-full border border-border/80 bg-background/60 p-1",
+        vertical ? "flex-col" : "items-center gap-1",
+      ].join(" ")}
+      role="tablist"
+      aria-label="Language"
+    >
+      <Link
+        href={enHref}
+        aria-current={locale === "en" ? "page" : undefined}
+        className={[
+          "rounded-full px-2 py-1 text-xs font-medium transition-colors",
+          locale === "en" ? "bg-primary/15 text-foreground" : "text-muted-foreground",
+          "hover:text-foreground",
+        ].join(" ")}
+        title={t(locale, "language.english")}
+        onClick={onNavigate}
+      >
+        EN
+      </Link>
+      <Link
+        href={deHref}
+        aria-current={locale === "de" ? "page" : undefined}
+        className={[
+          "rounded-full px-2 py-1 text-xs font-medium transition-colors",
+          locale === "de" ? "bg-primary/15 text-foreground" : "text-muted-foreground",
+          "hover:text-foreground",
+        ].join(" ")}
+        title={t(locale, "language.german")}
+        onClick={onNavigate}
+      >
+        DE
+      </Link>
+    </div>
+  );
+}
 
 export function Navbar() {
+  const locale = useLocale();
+  const pathSansLocalePrefix = useLocalePathSansPrefix();
+  const { user, loading, signOut } = useAuth();
+  const { openAuthModal } = useAuthModal();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const rest = pathSansLocalePrefix === "/" ? "" : pathSansLocalePrefix;
+  const enHref = `/en${rest}`;
+  const deHref = `/de${rest}`;
+  const homeHref = `/${locale}`;
+
+  const closeMobile = () => setMobileOpen(false);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-6">
-        <Link className="flex items-center gap-2 text-lg font-semibold tracking-wide" href="/">
-          <Image
-            src={logo}
-            alt="Bearhood"
-            width={28}
-            height={28}
-            priority
-            className="h-7 w-7"
-          />
-          <span>BEARHOOD</span>
-        </Link>
-
-        <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <a href="#events" className="transition-colors hover:text-foreground">
-            Events
-          </a>
-          <Link href="/ui-foundation" className="transition-colors hover:text-foreground">
-            UI Foundation
+    <>
+      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/70 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-6">
+          <Link
+            className="flex items-center gap-2 text-lg font-semibold tracking-wide"
+            href={homeHref}
+          >
+            <Image
+              src={logo}
+              alt="Bearhood"
+              width={28}
+              height={28}
+              priority
+              className="h-7 w-7"
+            />
+            <span>BEARHOOD</span>
           </Link>
-          <a href="#about" className="transition-colors hover:text-foreground">
-            About
-          </a>
-          <a href="#contact" className="transition-colors hover:text-foreground">
-            Contact
-          </a>
-        </nav>
 
-        <div className="flex items-center gap-2">
-          <Button size="sm" className="hidden md:inline-flex">
-            Join Waitlist
-          </Button>
-          <Button size="icon" variant="outline" className="md:hidden" aria-label="Menu">
-            <Menu className="h-4 w-4" />
-          </Button>
+          <nav className="hidden items-center gap-8 md:flex">
+            <NavbarNavLinks locale={locale} homeHref={homeHref} />
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <div className="hidden md:block">
+              <NavbarLanguageSwitch locale={locale} enHref={enHref} deHref={deHref} />
+            </div>
+
+            {!loading && user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="outline"
+                      size="icon-sm"
+                      className="hidden md:inline-flex rounded-full p-0"
+                      aria-label={t(locale, "navbar.account")}
+                    />
+                  }
+                >
+                  <Avatar size="sm" className="size-7">
+                    <AvatarFallback className="text-xs">
+                      {userInitials(user.email)}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-48">
+                  <DropdownMenuLabel className="truncate font-normal">
+                    {user.email}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => {
+                      void signOut();
+                    }}
+                  >
+                    {t(locale, "navbar.signOut")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button
+                size="sm"
+                className="hidden md:inline-flex"
+                disabled={loading}
+                onClick={() => openAuthModal()}
+              >
+                {t(locale, "navbar.signIn")}
+              </Button>
+            )}
+
+            <Button
+              size="icon"
+              variant="outline"
+              className="md:hidden"
+              aria-label={t(locale, "navbar.mobileMenu")}
+              onClick={() => setMobileOpen(true)}
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent side="right" className="flex w-full flex-col gap-6 sm:max-w-sm">
+          <SheetHeader>
+            <SheetTitle>{t(locale, "navbar.mobileMenuTitle")}</SheetTitle>
+          </SheetHeader>
+          <nav className="flex flex-col gap-4">
+            <NavbarNavLinks
+              locale={locale}
+              homeHref={homeHref}
+              onNavigate={closeMobile}
+            />
+          </nav>
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-medium text-muted-foreground">
+              {t(locale, "language.english")} / {t(locale, "language.german")}
+            </p>
+            <NavbarLanguageSwitch
+              locale={locale}
+              enHref={enHref}
+              deHref={deHref}
+              vertical
+              onNavigate={closeMobile}
+            />
+          </div>
+          <div className="mt-auto border-t border-border pt-4">
+            {!loading && user ? (
+              <div className="space-y-3">
+                <p className="truncate text-sm text-muted-foreground">{user.email}</p>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    void signOut();
+                    closeMobile();
+                  }}
+                >
+                  {t(locale, "navbar.signOut")}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                className="w-full"
+                disabled={loading}
+                onClick={() => {
+                  closeMobile();
+                  openAuthModal();
+                }}
+              >
+                {t(locale, "navbar.signIn")}
+              </Button>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }

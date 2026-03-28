@@ -65,20 +65,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useLocale } from "@/lib/i18n/use-locale";
+import { t } from "@/lib/i18n/messages";
 
 const sectionClass = "rounded-xl border bg-card p-5";
 
 export default function UiFoundationPage() {
+  const locale = useLocale();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [progress, setProgress] = useState(42);
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 md:px-6">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">UI Foundation</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {t(locale, "uiFoundation.title")}
+          </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Core component playground for Bearhood. This page is your base for building consistent
-          product screens fast.
+            {t(locale, "uiFoundation.description")}
         </p>
       </div>
 
@@ -86,11 +90,11 @@ export default function UiFoundationPage() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href={`/${locale}`}>{t(locale, "breadcrumb.home")}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>UI Foundation</BreadcrumbPage>
+                <BreadcrumbPage>{t(locale, "breadcrumb.uiFoundation")}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
