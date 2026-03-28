@@ -85,6 +85,8 @@ export const MESSAGES = {
     "auth.usePassword": "Sign in with password",
     "auth.resetPasswordTitle": "Set a new password",
     "auth.resetPasswordDescription": "Choose a strong password to secure your account.",
+    "auth.showPassword": "Show password",
+    "auth.hidePassword": "Hide password",
 
     "response.interested": "Interested",
     "response.attending": "Going",
@@ -183,6 +185,8 @@ export const MESSAGES = {
     "auth.resetPasswordDescription": "Wähle ein sicheres Passwort für dein Konto.",
     "auth.newPassword": "Neues Passwort",
     "auth.confirmPassword": "Passwort bestätigen",
+    "auth.showPassword": "Passwort anzeigen",
+    "auth.hidePassword": "Passwort verbergen",
 
     "response.interested": "Interessiert",
     "response.attending": "Dabei",

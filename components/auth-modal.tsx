@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ArrowLeft, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { ArrowLeft, Eye, EyeOff, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -9,18 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/lib/auth-context";
 import {
@@ -33,6 +24,7 @@ import {
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import { useIsDesktop } from "@/lib/use-media-query";
+import type { Locale } from "@/lib/i18n/locales";
 
 type View = "auth" | "forgot" | "reset";
 
@@ -57,6 +49,25 @@ function AuthResponsiveShell({
   const locale = useLocale();
   const isDesktop = useIsDesktop();
 
+  const close = useCallback(() => onOpenChange(false), [onOpenChange]);
+
+  useEffect(() => {
+    if (!open || isDesktop) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, isDesktop, close]);
+
+  useEffect(() => {
+    if (!open || isDesktop) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open, isDesktop]);
+
   if (!open) return null;
 
   if (isDesktop) {
@@ -74,34 +85,73 @@ function AuthResponsiveShell({
   }
 
   return (
-    <Drawer
-      open
-      onOpenChange={(next) => {
-        if (!next) onOpenChange(false);
-      }}
-      direction="bottom"
-      shouldScaleBackground={false}
+    <div
+      className="fixed inset-0 z-50 flex flex-col bg-background"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
     >
-      <DrawerContent className="flex max-h-[min(90vh,720px)] flex-col gap-0 rounded-t-2xl border-border/80 bg-card p-0">
-        <DrawerHeader className="relative shrink-0 border-b border-border/60 px-4 pb-3 pt-2 text-left">
-          <DrawerClose asChild>
-            <Button
-              variant="ghost"
-              size="icon-lg"
-              className="absolute top-0.5 right-0.5"
-              aria-label={t(locale, "eventModal.close")}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </DrawerClose>
-          <DrawerTitle className="pr-10 text-lg font-semibold leading-tight">{title}</DrawerTitle>
-          <DrawerDescription className="text-left text-muted-foreground">{description}</DrawerDescription>
-        </DrawerHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-          {children}
+      <div className="flex shrink-0 items-start justify-between border-b border-border/60 px-4 pb-3 pt-3">
+        <div className="min-w-0 flex-1 pr-10">
+          <h2 className="text-lg font-semibold leading-tight">{title}</h2>
+          <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
         </div>
-      </DrawerContent>
-    </Drawer>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          className="shrink-0"
+          aria-label={t(locale, "eventModal.close")}
+          onClick={close}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+      <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function PasswordInput({
+  id,
+  locale,
+  autoComplete,
+  value,
+  onChange,
+  minLength = 6,
+}: {
+  id: string;
+  locale: Locale;
+  autoComplete: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  minLength?: number;
+}) {
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <div className="relative">
+      <Input
+        id={id}
+        type={visible ? "text" : "password"}
+        autoComplete={autoComplete}
+        value={value}
+        onChange={onChange}
+        required
+        minLength={minLength}
+        className="pr-10"
+      />
+      <button
+        type="button"
+        className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+        aria-label={t(locale, visible ? "auth.hidePassword" : "auth.showPassword")}
+        onClick={() => setVisible((v) => !v)}
+        tabIndex={-1}
+      >
+        {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+      </button>
+    </div>
   );
 }
 
@@ -264,26 +314,22 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         <form onSubmit={handleResetPassword} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="reset-password">{t(locale, "auth.newPassword")}</Label>
-            <Input
+            <PasswordInput
               id="reset-password"
-              type="password"
+              locale={locale}
               autoComplete="new-password"
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
-              required
-              minLength={6}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="reset-confirm">{t(locale, "auth.confirmPassword")}</Label>
-            <Input
+            <PasswordInput
               id="reset-confirm"
-              type="password"
+              locale={locale}
               autoComplete="new-password"
               value={confirmPassword}
               onChange={(ev) => setConfirmPassword(ev.target.value)}
-              required
-              minLength={6}
             />
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
@@ -378,14 +424,12 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                     {t(locale, "auth.forgotPassword")}
                   </button>
                 </div>
-                <Input
+                <PasswordInput
                   id="login-password"
-                  type="password"
+                  locale={locale}
                   autoComplete="current-password"
                   value={password}
                   onChange={(ev) => setPassword(ev.target.value)}
-                  required
-                  minLength={6}
                 />
               </div>
               {error && <p className="text-sm text-destructive">{error}</p>}
@@ -393,25 +437,19 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
               <Button type="submit" className="h-11 w-full" disabled={submitting}>
                 {t(locale, "auth.submitLogin")}
               </Button>
-
-              <div className="relative py-1">
-                <Separator />
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
-                  {t(locale, "auth.orMagicLink")}
-                </span>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-11 w-full"
-                disabled={submitting}
-                onClick={() => {
-                  resetFields();
-                  setLoginMode("magic");
-                }}
-              >
-                {t(locale, "auth.useMagicLink")}
-              </Button>
+              <p className="text-center text-xs text-muted-foreground">
+                {t(locale, "auth.orMagicLink")}{" "}
+                <button
+                  type="button"
+                  className="underline underline-offset-4 hover:text-foreground"
+                  onClick={() => {
+                    resetFields();
+                    setLoginMode("magic");
+                  }}
+                >
+                  {t(locale, "auth.useMagicLink")}
+                </button>
+              </p>
             </form>
           ) : (
             <form onSubmit={handleMagicLink} className="space-y-4">
@@ -431,18 +469,17 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
               <Button type="submit" className="h-11 w-full" disabled={submitting}>
                 {t(locale, "auth.submitMagicLink")}
               </Button>
-              <Button
+              <button
                 type="button"
-                variant="ghost"
-                className="h-11 w-full"
+                className="flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground underline-offset-4 hover:text-foreground"
                 onClick={() => {
                   resetFields();
                   setLoginMode("password");
                 }}
               >
-                <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
+                <ArrowLeft className="h-3 w-3 shrink-0" />
                 {t(locale, "auth.usePassword")}
-              </Button>
+              </button>
             </form>
           )}
         </TabsContent>
@@ -462,14 +499,12 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="signup-password">{t(locale, "auth.password")}</Label>
-              <Input
+              <PasswordInput
                 id="signup-password"
-                type="password"
+                locale={locale}
                 autoComplete="new-password"
                 value={password}
                 onChange={(ev) => setPassword(ev.target.value)}
-                required
-                minLength={6}
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}

@@ -1,17 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Moon, Sun } from "lucide-react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -138,6 +132,7 @@ export function Navbar() {
   const { user, loading, signOut } = useAuth();
   const { openAuthModal } = useAuthModal();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const rest = pathSansLocalePrefix === "/" ? "" : pathSansLocalePrefix;
   const enHref = `/en${rest}`;
@@ -147,181 +142,193 @@ export function Navbar() {
   const aboutHref = `${homeHref}#about`;
   const contactHref = `${homeHref}#contact`;
 
-  const closeMobile = () => setMobileOpen(false);
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMobile();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileOpen, closeMobile]);
 
   return (
-    <>
-      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/70 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-6">
-          <Link
-            className="flex items-center gap-2 text-lg font-semibold tracking-wide"
-            href={homeHref}
-          >
-            <Image
-              src={logo}
-              alt="Bearhood"
-              width={28}
-              height={28}
-              priority
-              className="h-7 w-7"
-            />
-            <Image
-              src={textLogo}
-              alt="Bearhood"
-              height={20}
-              className="h-5 w-auto"
-            />
-          </Link>
+    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/70 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-6">
+        <Link
+          className="flex items-center gap-2 text-lg font-semibold tracking-wide"
+          href={homeHref}
+        >
+          <Image
+            src={logo}
+            alt="Bearhood"
+            width={28}
+            height={28}
+            priority
+            className="h-7 w-7"
+          />
+          <Image
+            src={textLogo}
+            alt="Bearhood"
+            height={20}
+            className="h-5 w-auto"
+          />
+        </Link>
 
-          <div className="flex items-center gap-2">
-            <div className="hidden md:block">
-              <NavbarLanguageSwitch locale={locale} enHref={enHref} deHref={deHref} />
-            </div>
-
-            <div className="hidden md:block">
-              <NavbarThemeToggle locale={locale} />
-            </div>
-
-            {!loading && user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  render={
-                    <Button
-                      variant="outline"
-                      size="icon-sm"
-                      className="hidden md:inline-flex rounded-full p-0"
-                      aria-label={t(locale, "navbar.account")}
-                    />
-                  }
-                >
-                  <Avatar size="sm" className="size-7">
-                    <AvatarFallback className="text-xs">
-                      {userInitials(user.email)}
-                    </AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="min-w-48">
-                  <DropdownMenuLabel className="truncate font-normal">
-                    {user.email}
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    variant="destructive"
-                    onClick={() => {
-                      void signOut();
-                    }}
-                  >
-                    {t(locale, "navbar.signOut")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button
-                size="sm"
-                className="hidden md:inline-flex"
-                disabled={loading}
-                onClick={() => openAuthModal()}
-              >
-                {t(locale, "navbar.signIn")}
-              </Button>
-            )}
-
-            <Button
-              size="icon"
-              variant="outline"
-              className="md:hidden"
-              aria-label={t(locale, "navbar.mobileMenu")}
-              onClick={() => setMobileOpen(true)}
-            >
-              <Menu className="h-4 w-4" />
-            </Button>
+        <div className="flex items-center gap-2">
+          <div className="hidden md:block">
+            <NavbarLanguageSwitch locale={locale} enHref={enHref} deHref={deHref} />
           </div>
-        </div>
-      </header>
 
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="right" className="flex w-full flex-col gap-6 sm:max-w-sm" closeLabel={t(locale, "eventModal.close")}>
-          <SheetHeader>
-            <SheetTitle>{t(locale, "navbar.mobileMenuTitle")}</SheetTitle>
-          </SheetHeader>
-          <nav className="flex flex-col gap-1" aria-label={t(locale, "navbar.mobileMenuTitle")}>
-            <Link
-              href={eventsHref}
-              onClick={closeMobile}
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "default" }),
-                "h-12 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
-              )}
-            >
-              {t(locale, "navbar.events")}
-            </Link>
-            <Link
-              href={aboutHref}
-              onClick={closeMobile}
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "default" }),
-                "h-12 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
-              )}
-            >
-              {t(locale, "navbar.about")}
-            </Link>
-            <Link
-              href={contactHref}
-              onClick={closeMobile}
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "default" }),
-                "h-12 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
-              )}
-            >
-              {t(locale, "navbar.contact")}
-            </Link>
-          </nav>
-          <div className="flex flex-col gap-2">
-            <p className="text-xs font-medium text-muted-foreground">
-              {t(locale, "language.english")} / {t(locale, "language.german")}
-            </p>
-            <NavbarLanguageSwitch
-              locale={locale}
-              enHref={enHref}
-              deHref={deHref}
-              vertical
-              onNavigate={closeMobile}
-            />
-          </div>
-          <div className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/15 px-4 py-3">
-            <span className="text-sm font-medium text-foreground">{t(locale, "navbar.appearance")}</span>
+          <div className="hidden md:block">
             <NavbarThemeToggle locale={locale} />
           </div>
-          <div className="mt-auto border-t border-border pt-4">
-            {!loading && user ? (
-              <div className="space-y-3">
-                <p className="truncate text-sm text-muted-foreground">{user.email}</p>
-                <Button
-                  variant="outline"
-                  className="w-full"
+
+          {!loading && user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    className="hidden md:inline-flex rounded-full p-0"
+                    aria-label={t(locale, "navbar.account")}
+                  />
+                }
+              >
+                <Avatar size="sm" className="size-7">
+                  <AvatarFallback className="text-xs">
+                    {userInitials(user.email)}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-48">
+                <DropdownMenuLabel className="truncate font-normal">
+                  {user.email}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
                   onClick={() => {
                     void signOut();
-                    closeMobile();
                   }}
                 >
                   {t(locale, "navbar.signOut")}
-                </Button>
-              </div>
-            ) : (
-              <Button
-                className="w-full"
-                disabled={loading}
-                onClick={() => {
-                  closeMobile();
-                  openAuthModal();
-                }}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              size="sm"
+              className="hidden md:inline-flex"
+              disabled={loading}
+              onClick={() => openAuthModal()}
+            >
+              {t(locale, "navbar.signIn")}
+            </Button>
+          )}
+
+          <Button
+            size="icon"
+            variant="outline"
+            className="md:hidden"
+            aria-label={t(locale, "navbar.mobileMenu")}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-panel"
+            onClick={() => setMobileOpen((o) => !o)}
+          >
+            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </Button>
+        </div>
+      </div>
+
+      {/* Inline collapsible mobile menu */}
+      <div
+        id="mobile-nav-panel"
+        ref={panelRef}
+        className={cn(
+          "grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out md:hidden",
+          mobileOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="min-h-0">
+          <div className="border-t border-border/60 px-4 pb-5 pt-3">
+            <nav className="flex flex-col gap-1" aria-label={t(locale, "navbar.mobileMenuTitle")}>
+              <Link
+                href={eventsHref}
+                onClick={closeMobile}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "default" }),
+                  "h-11 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+                )}
               >
-                {t(locale, "navbar.signIn")}
-              </Button>
-            )}
+                {t(locale, "navbar.events")}
+              </Link>
+              <Link
+                href={aboutHref}
+                onClick={closeMobile}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "default" }),
+                  "h-11 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+                )}
+              >
+                {t(locale, "navbar.about")}
+              </Link>
+              <Link
+                href={contactHref}
+                onClick={closeMobile}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "default" }),
+                  "h-11 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+                )}
+              >
+                {t(locale, "navbar.contact")}
+              </Link>
+            </nav>
+
+            <div className="mt-4 flex items-center gap-3">
+              <NavbarLanguageSwitch
+                locale={locale}
+                enHref={enHref}
+                deHref={deHref}
+                onNavigate={closeMobile}
+              />
+              <NavbarThemeToggle locale={locale} />
+            </div>
+
+            <div className="mt-4">
+              {!loading && user ? (
+                <div className="flex items-center gap-3">
+                  <p className="min-w-0 flex-1 truncate text-sm text-muted-foreground">{user.email}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      void signOut();
+                      closeMobile();
+                    }}
+                  >
+                    {t(locale, "navbar.signOut")}
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  className="w-full"
+                  size="sm"
+                  disabled={loading}
+                  onClick={() => {
+                    closeMobile();
+                    openAuthModal();
+                  }}
+                >
+                  {t(locale, "navbar.signIn")}
+                </Button>
+              )}
+            </div>
           </div>
-        </SheetContent>
-      </Sheet>
-    </>
+        </div>
+      </div>
+    </header>
   );
 }
