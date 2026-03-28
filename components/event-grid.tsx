@@ -59,7 +59,7 @@ export function EventGrid({
 }: EventGridProps) {
   return (
     <>
-      <div className="flex gap-4 overflow-x-auto pb-2 md:hidden snap-x snap-mandatory">
+      <div className="flex gap-4 overflow-x-auto overscroll-x-contain pb-2 md:hidden snap-x snap-mandatory scrollbar-none [-webkit-overflow-scrolling:touch]">
         {events.map((event, index) => (
           <EventGridReveal
             key={event.id}

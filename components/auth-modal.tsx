@@ -87,8 +87,8 @@ function AuthResponsiveShell({
           <DrawerClose asChild>
             <Button
               variant="ghost"
-              size="icon"
-              className="absolute top-1 right-1"
+              size="icon-lg"
+              className="absolute top-0.5 right-0.5"
               aria-label={t(locale, "eventModal.close")}
             >
               <X className="h-4 w-4" />

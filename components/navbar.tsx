@@ -240,7 +240,7 @@ export function Navbar() {
       </header>
 
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="right" className="flex w-full flex-col gap-6 sm:max-w-sm">
+        <SheetContent side="right" className="flex w-full flex-col gap-6 sm:max-w-sm" closeLabel={t(locale, "eventModal.close")}>
           <SheetHeader>
             <SheetTitle>{t(locale, "navbar.mobileMenuTitle")}</SheetTitle>
           </SheetHeader>

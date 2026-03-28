@@ -96,6 +96,8 @@ export const MESSAGES = {
 
     "events.loading": "Loading events…",
     "events.empty": "No upcoming events right now. Check back soon.",
+
+    "a11y.skipToContent": "Skip to content",
   },
   de: {
     "language.english": "Englisch",
@@ -192,6 +194,8 @@ export const MESSAGES = {
 
     "events.loading": "Events werden geladen…",
     "events.empty": "Derzeit keine anstehenden Events. Schau bald wieder vorbei.",
+
+    "a11y.skipToContent": "Zum Inhalt springen",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

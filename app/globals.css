@@ -123,9 +123,30 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   }
   html {
     @apply font-sans;
+  }
+}
+
+/*
+ * Prevent iOS Safari from zooming in when focusing form inputs.
+ * Inputs must be >= 16px; our Input/Textarea already use text-base on mobile,
+ * but this catches any edge-case overrides.
+ */
+@supports (-webkit-overflow-scrolling: touch) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: max(1rem, inherit);
   }
 }
 
@@ -201,4 +222,13 @@
   .response-btn-pulse {
     animation: none;
   }
+}
+
+/* Hide scrollbars on horizontal-scroll containers while keeping scroll */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }

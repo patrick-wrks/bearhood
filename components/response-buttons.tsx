@@ -82,7 +82,7 @@ export function ResponseButtons({
             variant={userResponse === "interested" ? "default" : "outline"}
             disabled={busy}
             className={cn(
-              "text-xs touch-manipulation",
+              "min-h-11 text-xs touch-manipulation",
               pulse === "interested" && "response-btn-pulse",
             )}
             onClick={() => void handleStatus("interested")}
@@ -95,7 +95,7 @@ export function ResponseButtons({
             variant={userResponse === "attending" ? "default" : "outline"}
             disabled={busy}
             className={cn(
-              "text-xs touch-manipulation",
+              "min-h-11 text-xs touch-manipulation",
               pulse === "attending" && "response-btn-pulse",
             )}
             onClick={() => void handleStatus("attending")}
@@ -117,7 +117,7 @@ export function ResponseButtons({
         <Button
           type="button"
           variant={userResponse === "interested" ? "default" : "outline"}
-          className={cn("touch-manipulation sm:flex-1", pulse === "interested" && "response-btn-pulse")}
+          className={cn("min-h-11 touch-manipulation sm:flex-1", pulse === "interested" && "response-btn-pulse")}
           disabled={busy}
           onClick={() => void handleStatus("interested")}
         >
@@ -126,7 +126,7 @@ export function ResponseButtons({
         <Button
           type="button"
           variant={userResponse === "attending" ? "default" : "outline"}
-          className={cn("touch-manipulation sm:flex-1", pulse === "attending" && "response-btn-pulse")}
+          className={cn("min-h-11 touch-manipulation sm:flex-1", pulse === "attending" && "response-btn-pulse")}
           disabled={busy}
           onClick={() => void handleStatus("attending")}
         >
