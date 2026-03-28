@@ -55,12 +55,19 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     setInfo(null);
   };
 
-  // When a password-recovery link is clicked, switch to the reset view
+  // When a password-recovery email link is clicked, defer switching to
+  // the reset view so we don't call setState synchronously inside an effect.
   useEffect(() => {
-    if (open && passwordRecovery) {
+    if (!open || !passwordRecovery) return;
+    const id = setTimeout(() => {
       setView("reset");
-      resetFields();
-    }
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setError(null);
+      setInfo(null);
+    }, 0);
+    return () => clearTimeout(id);
   }, [open, passwordRecovery]);
 
   const handleOpenChange = (next: boolean) => {
@@ -151,16 +158,6 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   };
 
   // ------------------------------------------------------------------
-  // Shared error / info display
-  // ------------------------------------------------------------------
-  const StatusMessages = () => (
-    <>
-      {error && <p className="text-sm text-destructive">{error}</p>}
-      {info && <p className="text-sm text-muted-foreground">{info}</p>}
-    </>
-  );
-
-  // ------------------------------------------------------------------
   // Render: Set new password (view = "reset")
   // ------------------------------------------------------------------
   if (view === "reset") {
@@ -196,7 +193,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                 minLength={6}
               />
             </div>
-            <StatusMessages />
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            {info && <p className="text-sm text-muted-foreground">{info}</p>}
             <Button type="submit" className="w-full" disabled={submitting}>
               {t(locale, "auth.submitNewPassword")}
             </Button>
@@ -229,7 +227,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                 required
               />
             </div>
-            <StatusMessages />
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            {info && <p className="text-sm text-muted-foreground">{info}</p>}
             <Button type="submit" className="w-full" disabled={submitting}>
               {t(locale, "auth.submitResetLink")}
             </Button>
@@ -300,7 +299,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                     minLength={6}
                   />
                 </div>
-                <StatusMessages />
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                {info && <p className="text-sm text-muted-foreground">{info}</p>}
                 <Button type="submit" className="w-full" disabled={submitting}>
                   {t(locale, "auth.submitLogin")}
                 </Button>
@@ -334,7 +334,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                     required
                   />
                 </div>
-                <StatusMessages />
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                {info && <p className="text-sm text-muted-foreground">{info}</p>}
                 <Button type="submit" className="w-full" disabled={submitting}>
                   {t(locale, "auth.submitMagicLink")}
                 </Button>
@@ -377,7 +378,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                   minLength={6}
                 />
               </div>
-              <StatusMessages />
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              {info && <p className="text-sm text-muted-foreground">{info}</p>}
               <Button type="submit" className="w-full" disabled={submitting}>
                 {t(locale, "auth.submitSignup")}
               </Button>
