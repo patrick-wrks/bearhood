@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Camera, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
@@ -34,28 +34,31 @@ export default function AccountPage() {
 
   const [displayName, setDisplayName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const [profileLoading, setProfileLoading] = useState(true);
+  const [loadedUserId, setLoadedUserId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const loadProfile = useCallback(async () => {
-    if (!user) {
-      setProfileLoading(false);
-      return;
-    }
-    setProfileLoading(true);
-    const profile = await getProfile(user.id);
-    if (profile) {
-      setDisplayName(profile.username ?? "");
-      setAvatarUrl(profile.avatar_url);
-    }
-    setProfileLoading(false);
-  }, [user]);
+  const profileLoaded = loadedUserId === user?.id;
 
   useEffect(() => {
-    void loadProfile();
-  }, [loadProfile]);
+    if (!user) return;
+
+    let cancelled = false;
+
+    getProfile(user.id).then((profile) => {
+      if (cancelled) return;
+      if (profile) {
+        setDisplayName(profile.username ?? "");
+        setAvatarUrl(profile.avatar_url);
+      }
+      setLoadedUserId(user.id);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   async function handleAvatarUpload(file: File) {
     if (!user) return;
@@ -132,7 +135,7 @@ export default function AccountPage() {
     setSaving(false);
   }
 
-  if (authLoading || profileLoading) {
+  if (authLoading || (user && !profileLoaded)) {
     return (
       <div className="mx-auto flex w-full max-w-6xl items-center justify-center px-4 py-24 md:px-6">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
