@@ -22,6 +22,9 @@ type AuthContextValue = {
   session: Session | null;
   loading: boolean;
   authConfigured: boolean;
+  /** True after a password-recovery email link is clicked. Modal listens to open reset form. */
+  passwordRecovery: boolean;
+  clearPasswordRecovery: () => void;
   signOut: () => Promise<{ error: string | null }>;
   refreshSession: () => Promise<void>;
 };
@@ -32,7 +35,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
   const authConfigured = isAuthAvailable();
+
+  const clearPasswordRecovery = useCallback(() => setPasswordRecovery(false), []);
 
   const refreshSession = useCallback(async () => {
     if (!authConfigured) {
@@ -79,10 +85,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const { unsubscribe } = onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession);
-      setUser(nextSession?.user ?? null);
-      setLoading(false);
+    const { unsubscribe } = onAuthStateChange((event, nextSession) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setPasswordRecovery(true);
+        setSession(nextSession);
+        setUser(nextSession?.user ?? null);
+        setLoading(false);
+      } else {
+        if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+          setPasswordRecovery(false);
+        }
+        setSession(nextSession);
+        setUser(nextSession?.user ?? null);
+        setLoading(false);
+      }
     });
 
     return unsubscribe;
@@ -92,6 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const result = await signOutUser();
     setUser(null);
     setSession(null);
+    setPasswordRecovery(false);
     return result;
   }, []);
 
@@ -101,10 +118,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       loading,
       authConfigured,
+      passwordRecovery,
+      clearPasswordRecovery,
       signOut,
       refreshSession,
     }),
-    [user, session, loading, authConfigured, signOut, refreshSession],
+    [user, session, loading, authConfigured, passwordRecovery, clearPasswordRecovery, signOut, refreshSession],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

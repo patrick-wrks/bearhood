@@ -1,5 +1,6 @@
 import type { AuthChangeEvent, Session, User } from "@supabase/supabase-js";
 import { hasSupabaseConfig, supabase } from "@/lib/supabase";
+import { getSiteUrl } from "@/lib/site-url";
 
 export type AuthResult = { error: string | null };
 
@@ -18,6 +19,9 @@ export async function signUpWithEmail(
   const { error } = await supabase.auth.signUp({
     email: email.trim(),
     password,
+    options: {
+      emailRedirectTo: `${getSiteUrl()}/`,
+    },
   });
 
   return { error: error?.message ?? null };
@@ -36,6 +40,46 @@ export async function signInWithEmail(
     password,
   });
 
+  return { error: error?.message ?? null };
+}
+
+export async function signInWithMagicLink(email: string): Promise<AuthResult> {
+  if (!supabase) {
+    return { error: "Supabase is not configured." };
+  }
+
+  const { error } = await supabase.auth.signInWithOtp({
+    email: email.trim(),
+    options: {
+      emailRedirectTo: `${getSiteUrl()}/`,
+    },
+  });
+
+  return { error: error?.message ?? null };
+}
+
+export async function sendPasswordResetEmail(
+  email: string,
+): Promise<AuthResult> {
+  if (!supabase) {
+    return { error: "Supabase is not configured." };
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+    redirectTo: `${getSiteUrl()}/`,
+  });
+
+  return { error: error?.message ?? null };
+}
+
+export async function updateUserPassword(
+  newPassword: string,
+): Promise<AuthResult> {
+  if (!supabase) {
+    return { error: "Supabase is not configured." };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
   return { error: error?.message ?? null };
 }
 

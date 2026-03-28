@@ -2,7 +2,7 @@
 
 ## Project
 
-**Bearhood** — Social-first event web app (Resident Advisor–style): discover gay bear events, see **interested** / **going** counts, and save your own status when signed in.
+**Bearhood** — Social-first event web app (Resident Advisor-style): discover gay bear events, see **interested** / **going** counts, and save your own status when signed in.
 
 ## Current Status
 
@@ -18,24 +18,51 @@
 
 ## Milestones
 
-1. **Done:** Email auth (sign up / log in), session via Supabase Auth.
+1. **Done:** Email auth (sign up / log in / magic link / forgot + reset password), session via Supabase Auth.
 2. **Done:** `event_responses` integration with RLS (documented in README).
 3. **Done:** EN/DE UI copy, EUR pricing, locale-aware dates, mobile nav sheet, loading/empty states.
+4. **Done:** Supabase project linked via CLI; schema migrations in `supabase/migrations/`.
 
-## Roadmap (next 1–2 weeks)
+## Roadmap (next 1-2 weeks)
 
+- Configure `NEXT_PUBLIC_SITE_URL` GitHub Actions secret (see below).
+- Register redirect URLs in Supabase dashboard (see below).
 - Point footer social URLs to real Bearhood profiles (`NEXT_PUBLIC_SOCIAL_*` or edit `lib/social-links.ts`).
 - Optional: profiles table + username/avatar in UI.
-- Optional: Edge Functions or hosted API if you outgrow pure client writes.
 - Monitor Supabase quotas and add rate limits if needed.
 
 ## Progress Notes
 
-- **2026-03-28:** Auth modal + navbar user menu; `ResponseButtons` on cards and modal; `event_responses` helpers with demo fallbacks; skeleton/empty states; UI Foundation link removed from public nav (route still exists for devs).
+- **2026-03-28:** Auth modal + navbar user menu; `ResponseButtons` on cards and modal; `event_responses` helpers with demo fallbacks; skeleton/empty states; UI Foundation link removed from public nav.
+- **2026-03-28:** Added magic link sign-in, forgot password, and reset password flows. Added `NEXT_PUBLIC_SITE_URL` env var for redirect config.
+
+## Auth email redirect setup (required once per environment)
+
+For magic link, password reset, and sign-up confirmation emails to redirect back to the app correctly, two things must be configured once:
+
+**1. Supabase dashboard → Authentication → URL Configuration → Redirect URLs** — add:
+- `http://localhost:3000/**` (local dev)
+- `https://patrick-wrks.github.io/bearhood/**` (GitHub Pages production)
+
+**2. `NEXT_PUBLIC_SITE_URL` env var must be set:**
+- In `.env.local` for local dev: `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
+- As a **GitHub Actions secret** for production: `NEXT_PUBLIC_SITE_URL=https://patrick-wrks.github.io/bearhood`
+
+See `.env.local.example` for the full local setup template.
+
+## Known infrastructure (read this first)
+
+**For future AI sessions and collaborators:** The production GitHub repository already has the Supabase client credentials stored as **GitHub Actions repository secrets** (used by `.github/workflows/deploy.yml` at build time). You do **not** need to ask the maintainer to "add Supabase secrets" unless something is broken or they are setting up a **new** fork or repo.
+
+- **Secret names (values are only in GitHub, never in this repo):** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- **`NEXT_PUBLIC_SITE_URL`** also needs to be a GitHub Actions secret (value: `https://patrick-wrks.github.io/bearhood`)
+- **Local dev** uses `.env.local` (see `.env.local.example`); that file is gitignored.
+- **Supabase project:** `bearhood`, ref `xitzmarhnobazxbuthjy`, West EU (Ireland). Linked via CLI.
+- **Schema migrations** live in `supabase/migrations/`. Apply with `supabase db push`.
 
 ## Backlog / Ideas
 
-- Push / email reminders for events users marked “going”.
+- Push / email reminders for events users marked "going".
 - Organizer dashboard (separate app or Supabase dashboard + RLS).
 - OAuth (Google/Apple) via Supabase.
 - List view / filters by tag or date.
@@ -48,14 +75,18 @@
 
 ## Verification Checklist
 
-- [x] `npm run dev` works locally
+- [x] `npm run dev` works locally (requires `.env.local` with Supabase keys)
 - [x] `npm run build` succeeds
 - [x] `npm run lint` passes (img-element warnings acceptable for remote/dynamic URLs)
+- [x] GitHub Actions secrets for Supabase (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) — **configured on the repo**
+- [ ] `NEXT_PUBLIC_SITE_URL` added as GitHub Actions secret (`https://patrick-wrks.github.io/bearhood`)
+- [ ] Supabase dashboard → redirect URLs registered for local + production
 - [ ] Deployed output renders correctly on GitHub Pages (`/bearhood` base path)
-- [ ] Supabase: run README SQL, confirm auth + `event_responses` work end-to-end
+- [ ] Auth flows tested end-to-end: sign up, log in, magic link, forgot + reset password
 
 ## References
 
 - `README.md`
 - `.env.local.example`
 - `.github/workflows/deploy.yml`
+- `supabase/migrations/20260328120000_initial_schema.sql`

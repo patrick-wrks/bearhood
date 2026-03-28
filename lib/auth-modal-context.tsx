@@ -4,11 +4,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 import { AuthModal } from "@/components/auth-modal";
+import { useAuth } from "@/lib/auth-context";
 
 type AuthModalContextValue = {
   openAuthModal: () => void;
@@ -17,7 +19,17 @@ type AuthModalContextValue = {
 const AuthModalContext = createContext<AuthModalContextValue | null>(null);
 
 export function AuthModalProvider({ children }: { children: ReactNode }) {
+  const { passwordRecovery } = useAuth();
+  // Open immediately when recovery event fires; otherwise start closed
   const [open, setOpen] = useState(false);
+
+  // Defer the setState so it runs after the current render cycle,
+  // avoiding the "setState synchronously in effect" lint rule.
+  useEffect(() => {
+    if (!passwordRecovery) return;
+    const id = setTimeout(() => setOpen(true), 0);
+    return () => clearTimeout(id);
+  }, [passwordRecovery]);
 
   const openAuthModal = useCallback(() => setOpen(true), []);
 
