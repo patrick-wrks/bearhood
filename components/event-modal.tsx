@@ -76,6 +76,7 @@ function EventModalBody({
   includeImage = true,
 }: EventModalBodyProps) {
   const locale = useLocale();
+  const [showComments, setShowComments] = useState(false);
   const ticketUrl = event.ticketUrl;
   const learnMoreUrl = event.learnMoreUrl ?? event.ticketUrl;
 
@@ -153,15 +154,18 @@ function EventModalBody({
             userId={userId}
             authConfigured={authConfigured}
             onUpdated={onSocialUpdated}
+            onCommentClick={() => setShowComments((v) => !v)}
           />
         </div>
 
-        <CommentSection
-          eventId={event.id}
-          userId={userId}
-          authConfigured={authConfigured}
-          onCommentAdded={onSocialUpdated}
-        />
+        {showComments && (
+          <CommentSection
+            eventId={event.id}
+            userId={userId}
+            authConfigured={authConfigured}
+            onCommentAdded={onSocialUpdated}
+          />
+        )}
 
         {!omitBottomActions && (
           <div className="flex flex-col gap-3 sm:flex-row">
