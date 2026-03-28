@@ -12,7 +12,7 @@ const poppins = Poppins({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://patrick-wrks.github.io/bearhood";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://patrick-wrks.github.io/bearhood";
 
 export const metadata: Metadata = {
   title: "Bearhood | Social Media Event Brand",
