@@ -219,15 +219,12 @@ export const MESSAGES = {
       "Consent, warmth, and bold self-expression. We build nights where you can show up as you are — and leave with new friends.",
 
     "footer.navCommunity": "Community",
-    "footer.navConnect": "Connect",
     "footer.navLegal": "Legal",
     "footer.linkEvents": "Events",
     "footer.linkAbout": "About",
     "footer.linkFaq": "FAQ",
     "footer.linkPrivacy": "Privacy",
-    "footer.linkTerms": "Terms",
     "footer.linkImprint": "Imprint",
-    "footer.legalPlaceholder": "Links coming soon",
   },
   de: {
     "language.english": "Englisch",
@@ -447,15 +444,12 @@ export const MESSAGES = {
       "Zustimmung, Wärme und mutiger Ausdruck. Wir bauen Nächte, in denen du du selbst sein kannst — und mit neuen Freunden nach Hause gehst.",
 
     "footer.navCommunity": "Community",
-    "footer.navConnect": "Connect",
     "footer.navLegal": "Rechtliches",
     "footer.linkEvents": "Events",
     "footer.linkAbout": "Über uns",
     "footer.linkFaq": "FAQ",
     "footer.linkPrivacy": "Datenschutz",
-    "footer.linkTerms": "AGB",
     "footer.linkImprint": "Impressum",
-    "footer.legalPlaceholder": "Links folgen in Kürze",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

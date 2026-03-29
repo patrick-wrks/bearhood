@@ -158,11 +158,14 @@ export function Navbar() {
     return () => document.removeEventListener("keydown", onKey);
   }, [mobileOpen, closeMobile]);
 
+  const desktopNavLinkClass =
+    "text-sm font-medium text-muted-foreground transition-colors hover:text-foreground";
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-6">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
         <Link
-          className="flex items-center gap-2 text-lg font-semibold tracking-wide"
+          className="flex shrink-0 items-center gap-2 text-lg font-semibold tracking-wide"
           href={homeHref}
         >
           <Image
@@ -181,7 +184,30 @@ export function Navbar() {
           />
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="hidden min-w-0 flex-1 justify-center md:flex">
+          <nav
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 lg:gap-x-8"
+            aria-label={t(locale, "navbar.mobileMenuTitle")}
+          >
+            <Link href={eventsHref} className={desktopNavLinkClass}>
+              {t(locale, "navbar.events")}
+            </Link>
+            <Link href={aboutHref} className={desktopNavLinkClass}>
+              {t(locale, "navbar.about")}
+            </Link>
+            <Link href={faqHref} className={desktopNavLinkClass}>
+              {t(locale, "footer.linkFaq")}
+            </Link>
+            <Link href={contactHref} className={desktopNavLinkClass}>
+              {t(locale, "navbar.contact")}
+            </Link>
+            <Link href={accountHref} className={desktopNavLinkClass}>
+              {t(locale, "navbar.account")}
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-2">
           <div className="hidden md:block">
             <NavbarLanguageSwitch locale={locale} enHref={enHref} deHref={deHref} />
           </div>

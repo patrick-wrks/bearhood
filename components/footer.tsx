@@ -32,7 +32,7 @@ export function Footer() {
       className="mt-16 border-t border-border/80 bg-card/30"
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-10 md:px-6">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div className="space-y-3 lg:col-span-1">
             <p className="text-sm font-semibold text-foreground">{t(locale, "footer.navCommunity")}</p>
             <nav className="flex flex-col gap-2" aria-label={t(locale, "footer.navCommunity")}>
@@ -49,53 +49,21 @@ export function Footer() {
           </div>
 
           <div className="space-y-3">
-            <p className="text-sm font-semibold text-foreground">{t(locale, "footer.navConnect")}</p>
-            <nav className="flex flex-col gap-2" aria-label={t(locale, "footer.navConnect")}>
-              <a
-                href={socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}
-              >
-                Instagram
-              </a>
-              <a
-                href={socialLinks.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}
-              >
-                Facebook
-              </a>
-              <a
-                href={socialLinks.eventbrite}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}
-              >
-                Eventbrite
-              </a>
-              <a
-                href={socialLinks.residentAdvisor}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}
-              >
-                Resident Advisor
-              </a>
-            </nav>
-          </div>
-
-          <div className="space-y-3">
             <p className="text-sm font-semibold text-foreground">{t(locale, "footer.navLegal")}</p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {t(locale, "footer.legalPlaceholder")}
-            </p>
-            <ul className="flex flex-col gap-1 text-sm text-muted-foreground">
-              <li>{t(locale, "footer.linkPrivacy")}</li>
-              <li>{t(locale, "footer.linkTerms")}</li>
-              <li>{t(locale, "footer.linkImprint")}</li>
-            </ul>
+            <nav className="flex flex-col gap-2" aria-label={t(locale, "footer.navLegal")}>
+              <Link
+                href={`/${locale}/privacy/`}
+                className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}
+              >
+                {t(locale, "footer.linkPrivacy")}
+              </Link>
+              <Link
+                href={`/${locale}/imprint/`}
+                className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}
+              >
+                {t(locale, "footer.linkImprint")}
+              </Link>
+            </nav>
           </div>
 
           <div className="space-y-3 lg:col-span-1">

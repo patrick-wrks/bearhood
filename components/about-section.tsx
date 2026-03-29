@@ -43,18 +43,18 @@ export function AboutSection() {
       className="relative left-1/2 mt-16 w-screen max-w-[100vw] -translate-x-1/2 overflow-x-hidden border-y border-border/60 bg-muted/40 py-16 md:mt-20 md:py-24"
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 md:gap-12 md:px-6">
-        <div className="flex justify-center">
-          <Image
-            src={bearWithLogo}
-            alt={t(locale, "about.illustrationAlt")}
-            width={1200}
-            height={1280}
-            className="h-auto w-full max-w-xs sm:max-w-sm md:max-w-md"
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 24rem, 28rem"
-          />
-        </div>
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-12">
           <div className="max-w-xl space-y-4">
+            <div className="flex justify-center md:justify-start">
+              <Image
+                src={bearWithLogo}
+                alt={t(locale, "about.illustrationAlt")}
+                width={1200}
+                height={1280}
+                className="h-auto w-full max-w-36 sm:max-w-40 md:max-w-36"
+                sizes="(max-width: 767px) 100vw, 9rem"
+              />
+            </div>
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{t(locale, "about.title")}</h2>
             <p className="text-base leading-8 text-muted-foreground md:text-lg md:leading-9">
               {t(locale, "about.body")}
