@@ -84,13 +84,23 @@ function EventModalBody({
   return (
     <>
       {includeImage && (
-        <img
-          src={event.imageUrl}
-          alt={event.title}
-          loading="lazy"
-          decoding="async"
-          className={imageClassName ?? "h-56 w-full rounded-md object-cover"}
-        />
+        <div className="relative overflow-hidden rounded-md">
+          <img
+            src={event.imageUrl}
+            alt={event.title}
+            loading="lazy"
+            decoding="async"
+            className={imageClassName ?? "h-56 w-full object-cover"}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
+          {event.logoUrl && (
+            <img
+              src={event.logoUrl}
+              alt={event.title}
+              className="pointer-events-none absolute inset-0 m-auto h-24 w-auto max-w-[70%] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
+            />
+          )}
+        </div>
       )}
       <div className="space-y-4">
         <div className="space-y-2">
@@ -311,13 +321,23 @@ export function EventModal({
       {/* Desktop: centered dialog */}
       <Dialog open={open && isDesktop} onOpenChange={handleDialogOpenChange}>
         <DialogContent className="max-h-[90vh] overflow-y-auto border-border/80 bg-card sm:max-w-2xl">
-          <img
-            src={event.imageUrl}
-            alt={event.title}
-            loading="lazy"
-            decoding="async"
-            className="h-56 w-full rounded-md object-cover"
-          />
+          <div className="relative overflow-hidden rounded-md">
+            <img
+              src={event.imageUrl}
+              alt={event.title}
+              loading="lazy"
+              decoding="async"
+              className="h-56 w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
+            {event.logoUrl && (
+              <img
+                src={event.logoUrl}
+                alt={event.title}
+                className="pointer-events-none absolute inset-0 m-auto h-24 w-auto max-w-[70%] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
+              />
+            )}
+          </div>
           <DialogHeader>
             <DialogTitle className="text-2xl">{event.title}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
