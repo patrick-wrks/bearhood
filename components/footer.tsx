@@ -26,11 +26,10 @@ export function Footer() {
   const aboutHref = `${homeHref}#about`;
   const faqHref = `${homeHref}#faq`;
 
+  const contactHref = `/${locale}/contact`;
+
   return (
-    <footer
-      id="contact"
-      className="mt-16 border-t border-border/80 bg-card/30"
-    >
+    <footer className="mt-16 border-t border-border/80 bg-card/30">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-10 md:px-6">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div className="space-y-3 lg:col-span-1">
@@ -44,6 +43,9 @@ export function Footer() {
               </Link>
               <Link href={faqHref} className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}>
                 {t(locale, "footer.linkFaq")}
+              </Link>
+              <Link href={contactHref} className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}>
+                {t(locale, "footer.linkContact")}
               </Link>
             </nav>
           </div>

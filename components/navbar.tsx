@@ -144,7 +144,7 @@ export function Navbar() {
   const eventsHref = `${homeHref}#events`;
   const aboutHref = `${homeHref}#about`;
   const faqHref = `${homeHref}#faq`;
-  const contactHref = `${homeHref}#contact`;
+  const contactHref = `/${locale}/contact`;
   const accountHref = `/${locale}/account`;
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
