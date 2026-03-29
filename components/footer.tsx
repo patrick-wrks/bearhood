@@ -27,6 +27,7 @@ export function Footer() {
   const faqHref = `${homeHref}#faq`;
 
   const contactHref = `/${locale}/contact`;
+  const galleryHref = `/${locale}/gallery`;
 
   return (
     <footer className="mt-16 border-t border-border/80 bg-card/30">
@@ -46,6 +47,9 @@ export function Footer() {
               </Link>
               <Link href={contactHref} className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}>
                 {t(locale, "footer.linkContact")}
+              </Link>
+              <Link href={galleryHref} className={cn(footerLinkClass, "inline-flex min-h-11 items-center py-1 touch-manipulation")}>
+                {t(locale, "footer.linkGallery")}
               </Link>
             </nav>
           </div>

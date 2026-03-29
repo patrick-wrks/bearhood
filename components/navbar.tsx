@@ -145,6 +145,7 @@ export function Navbar() {
   const aboutHref = `${homeHref}#about`;
   const faqHref = `${homeHref}#faq`;
   const contactHref = `/${locale}/contact`;
+  const galleryHref = `/${locale}/gallery`;
   const accountHref = `/${locale}/account`;
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
@@ -200,6 +201,9 @@ export function Navbar() {
             </Link>
             <Link href={contactHref} className={desktopNavLinkClass}>
               {t(locale, "navbar.contact")}
+            </Link>
+            <Link href={galleryHref} className={desktopNavLinkClass}>
+              {t(locale, "navbar.gallery")}
             </Link>
             <Link href={accountHref} className={desktopNavLinkClass}>
               {t(locale, "navbar.account")}
@@ -331,6 +335,16 @@ export function Navbar() {
                 )}
               >
                 {t(locale, "navbar.contact")}
+              </Link>
+              <Link
+                href={galleryHref}
+                onClick={closeMobile}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "default" }),
+                  "h-11 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+                )}
+              >
+                {t(locale, "navbar.gallery")}
               </Link>
             </nav>
 

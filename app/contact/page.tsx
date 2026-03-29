@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Loader2, Mail, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useLocale } from "@/lib/i18n/use-locale";
@@ -27,19 +27,23 @@ const socialIconClass =
 export default function ContactPage() {
   const locale = useLocale();
 
+  const formRef = useRef<HTMLFormElement>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) {
-      toast.error(t(locale, "contact.formRequired"));
+    if (honeypot) {
+      toast.success(t(locale, "contact.formSuccess"));
       return;
     }
+
+    if (!formRef.current?.reportValidity()) return;
 
     setSubmitting(true);
     const { error } = await submitContactMessage({
@@ -145,7 +149,21 @@ export default function ContactPage() {
         {/* Form */}
         <Card className="border-border/60 bg-card/50 backdrop-blur-sm">
           <CardContent className="p-6 md:p-8">
-            <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
+            <form ref={formRef} onSubmit={(e) => void handleSubmit(e)} className="space-y-5" noValidate={false}>
+              {/* Honeypot — invisible to humans, auto-filled by bots */}
+              <div aria-hidden="true" className="absolute -left-[9999px] -top-[9999px] h-0 w-0 overflow-hidden">
+                <label htmlFor="contact-website">Website</label>
+                <input
+                  id="contact-website"
+                  name="website"
+                  type="text"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  autoComplete="off"
+                  tabIndex={-1}
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="contact-name">{t(locale, "contact.formName")}</Label>
                 <Input
