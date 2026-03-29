@@ -84,7 +84,7 @@ export function EventsExperience() {
   return (
     <>
       <section
-        className="-mx-4 rounded-2xl bg-muted/35 px-4 py-10 md:-mx-0 md:px-6 md:py-14"
+        className="-mx-4 rounded-2xl bg-muted/35 px-4 pt-10 pb-4 md:-mx-0 md:px-6 md:pt-14 md:pb-6"
         aria-label={t(locale, "events.heroSectionLabel")}
       >
         {eventsLoading ? (

@@ -14,7 +14,7 @@ export function PartnersSection() {
 
   return (
     <section
-      className="mt-8 md:mt-10"
+      className="mt-4 md:mt-6"
       aria-label={t(locale, "events.partnersSectionLabel")}
     >
       <div className="rounded-2xl border border-border/70 bg-card/60 px-5 py-6 shadow-sm md:px-8 md:py-7">

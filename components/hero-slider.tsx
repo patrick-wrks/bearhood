@@ -7,10 +7,9 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  type CarouselApi,
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
-import { cn, formatEventDate } from "@/lib/utils";
+import { formatEventDate } from "@/lib/utils";
 import type { EventItem } from "@/lib/types";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
@@ -32,28 +31,6 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
       stopOnInteraction: true,
     }),
   );
-  const [carouselApi, setCarouselApi] = React.useState<CarouselApi | null>(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!carouselApi) return;
-
-    const updateSelectedIndex = () => {
-      setSelectedIndex(carouselApi.selectedScrollSnap());
-    };
-
-    updateSelectedIndex();
-    carouselApi.on("select", updateSelectedIndex);
-    carouselApi.on("reInit", updateSelectedIndex);
-
-    return () => {
-      carouselApi.off("select", updateSelectedIndex);
-      carouselApi.off("reInit", updateSelectedIndex);
-    };
-  }, [carouselApi]);
-
-  const slideCount = carouselApi?.scrollSnapList().length ?? featuredEvents.length;
-
   if (featuredEvents.length === 0) {
     return null;
   }
@@ -63,7 +40,6 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
       <Carousel
         plugins={[plugin.current]}
         className="w-full"
-        setApi={setCarouselApi}
         onMouseEnter={() => plugin.current.stop()}
         onMouseLeave={() => plugin.current.play()}
         aria-label={t(locale, "hero.carouselLabel")}
@@ -114,52 +90,6 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
           ))}
         </CarouselContent>
       </Carousel>
-
-      <div className="mt-3 flex flex-col items-center gap-2">
-        <div
-          className="flex items-center justify-center gap-1"
-          role="tablist"
-          aria-label={t(locale, "hero.slidePickerLabel")}
-        >
-          {Array.from({ length: slideCount }).map((_, i) => {
-            const isActive = i === selectedIndex;
-
-            return (
-              <button
-                key={i}
-                type="button"
-                aria-label={`${t(locale, "hero.goToSlide")} ${i + 1}`}
-                aria-current={isActive ? "true" : undefined}
-                className="flex h-11 min-h-11 min-w-11 touch-manipulation items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/90 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
-                onClick={() => carouselApi?.scrollTo(i)}
-              >
-                <span
-                  className={cn(
-                    "block rounded-full border border-white/70 transition-[width,background-color] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
-                    isActive ? "h-2.5 w-8 bg-white/90" : "h-2.5 w-2.5 bg-white/20 hover:bg-white/40",
-                  )}
-                  aria-hidden
-                />
-              </button>
-            );
-          })}
-        </div>
-
-        <div
-          className="h-1 w-full max-w-xs overflow-hidden rounded-full bg-white/25"
-          aria-hidden
-        >
-          <div
-            key={selectedIndex}
-            className="hero-autoplay-bar-fill bg-white/90"
-            style={
-              {
-                "--hero-autoplay-ms": `${AUTOPLAY_MS}ms`,
-              } as React.CSSProperties
-            }
-          />
-        </div>
-      </div>
     </div>
   );
 }
