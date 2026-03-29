@@ -181,7 +181,7 @@ export function Navbar() {
             src={textLogo}
             alt="Bearhood"
             height={20}
-            className="h-5 w-auto"
+            className="h-5 w-auto dark:invert"
           />
         </Link>
 
