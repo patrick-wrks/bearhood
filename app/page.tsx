@@ -1,5 +1,6 @@
-import { EventsExperience } from "@/components/events-experience";
 import { AboutSection } from "@/components/about-section";
+import { EventsExperience } from "@/components/events-experience";
+import { FaqSection } from "@/components/faq-section";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
         <EventsExperience />
       </div>
       <AboutSection />
+      <FaqSection />
     </div>
   );
 }

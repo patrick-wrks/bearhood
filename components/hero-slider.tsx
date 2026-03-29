@@ -78,7 +78,7 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
                     <Button
                       size="lg"
                       type="button"
-                      className="touch-manipulation"
+                      className="touch-manipulation bg-white text-black hover:bg-white/90"
                       onClick={() => onExploreEvent(event)}
                     >
                       {t(locale, "hero.exploreEvent")}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CalendarDays, MapPin, Ticket, X } from "lucide-react";
+import { CalendarDays, CalendarPlus, MapPin, Ticket, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { EventItem, EventSocialCounts } from "@/lib/types";
-import { formatEventDate, formatEventPriceEur, formatEventTime } from "@/lib/utils";
+import { downloadIcsFile, formatEventDate, formatEventPriceEur, formatEventTime } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import { localizedDescription, localizedShortDescription } from "@/lib/events";
@@ -79,7 +79,6 @@ function EventModalBody({
   const locale = useLocale();
   const [showComments, setShowComments] = useState(false);
   const ticketUrl = event.ticketUrl;
-  const learnMoreUrl = event.learnMoreUrl ?? event.ticketUrl;
 
   return (
     <>
@@ -193,13 +192,10 @@ function EventModalBody({
             <Button
               variant="outline"
               className="sm:flex-1"
-              disabled={!learnMoreUrl}
-              onClick={() => {
-                if (!learnMoreUrl) return;
-                window.open(learnMoreUrl, "_blank", "noopener,noreferrer");
-              }}
+              onClick={() => downloadIcsFile(event)}
             >
-              {t(locale, "eventModal.learnMore")}
+              <CalendarPlus className="mr-2 h-4 w-4" aria-hidden />
+              {t(locale, "eventModal.addToCalendar")}
             </Button>
           </div>
         )}
@@ -234,7 +230,6 @@ export function EventModal({
   if (!event) return null;
 
   const ticketUrl = event.ticketUrl;
-  const learnMoreUrl = event.learnMoreUrl ?? event.ticketUrl;
 
   const handleDrawerOpenChange = (next: boolean) => {
     if (!next) onOpenChange(false);
@@ -306,13 +301,10 @@ export function EventModal({
             <Button
               variant="outline"
               className="h-11 w-full"
-              disabled={!learnMoreUrl}
-              onClick={() => {
-                if (!learnMoreUrl) return;
-                window.open(learnMoreUrl, "_blank", "noopener,noreferrer");
-              }}
+              onClick={() => downloadIcsFile(event)}
             >
-              {t(locale, "eventModal.learnMore")}
+              <CalendarPlus className="mr-2 h-4 w-4" aria-hidden />
+              {t(locale, "eventModal.addToCalendar")}
             </Button>
           </DrawerFooter>
         </DrawerContent>

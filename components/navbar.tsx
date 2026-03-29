@@ -143,6 +143,7 @@ export function Navbar() {
   const homeHref = `/${locale}`;
   const eventsHref = `${homeHref}#events`;
   const aboutHref = `${homeHref}#about`;
+  const faqHref = `${homeHref}#faq`;
   const contactHref = `${homeHref}#contact`;
   const accountHref = `/${locale}/account`;
 
@@ -284,6 +285,16 @@ export function Navbar() {
                 )}
               >
                 {t(locale, "navbar.about")}
+              </Link>
+              <Link
+                href={faqHref}
+                onClick={closeMobile}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "default" }),
+                  "h-11 w-full touch-manipulation justify-start rounded-lg px-3 text-base",
+                )}
+              >
+                {t(locale, "footer.linkFaq")}
               </Link>
               <Link
                 href={contactHref}

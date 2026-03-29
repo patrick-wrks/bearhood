@@ -79,66 +79,66 @@ export function SocialActions({
     <div className="flex items-center gap-1">
       <Button
         type="button"
-        variant="ghost"
+        variant="outline"
         size="sm"
         disabled={busy}
         className={cn(
-          "gap-1.5 px-2.5 min-h-9 touch-manipulation",
-          likeAnim && "social-btn-pulse",
+          "rounded-full gap-1.5 px-4 min-h-8 touch-manipulation text-xs font-medium transition-all",
+          bookmarked
+            ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90"
+            : "border-border/80 text-muted-foreground hover:text-foreground hover:border-foreground/30",
+          bookmarkAnim && "social-btn-pulse",
         )}
-        onClick={() => void handleLike()}
-        aria-label={t(locale, "social.like")}
+        onClick={() => void handleBookmark()}
+        aria-label={t(locale, "social.interested")}
+        aria-pressed={bookmarked}
       >
-        <Heart
-          className={cn(
-            "h-[18px] w-[18px] transition-colors",
-            liked ? "fill-red-500 text-red-500" : "text-muted-foreground",
-          )}
-        />
-        {counts.likes > 0 && (
-          <span className="text-xs tabular-nums text-muted-foreground">
-            {counts.likes}
-          </span>
-        )}
+        {bookmarked && <Check className="h-3.5 w-3.5 shrink-0" aria-hidden />}
+        {counts.interested > 0
+          ? t(locale, "social.interestedCount").replace("{count}", String(counts.interested))
+          : t(locale, "social.interested")}
       </Button>
 
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        className="gap-1.5 px-2.5 min-h-9 touch-manipulation"
-        onClick={onCommentClick}
-        aria-label={t(locale, "social.comment")}
-      >
-        <MessageCircle className="h-[18px] w-[18px] text-muted-foreground" />
-        {counts.comments > 0 && (
-          <span className="text-xs tabular-nums text-muted-foreground">
-            {counts.comments}
-          </span>
-        )}
-      </Button>
-
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-1">
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="sm"
           disabled={busy}
           className={cn(
-            "rounded-full gap-1.5 px-4 min-h-8 touch-manipulation text-xs font-medium transition-all",
-            bookmarked
-              ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90"
-              : "border-border/80 text-muted-foreground hover:text-foreground hover:border-foreground/30",
-            bookmarkAnim && "social-btn-pulse",
+            "gap-1.5 px-2.5 min-h-9 touch-manipulation",
+            likeAnim && "social-btn-pulse",
           )}
-          onClick={() => void handleBookmark()}
-          aria-label={t(locale, "social.interested")}
-          aria-pressed={bookmarked}
+          onClick={() => void handleLike()}
+          aria-label={t(locale, "social.like")}
         >
-          {bookmarked && <Check className="h-3.5 w-3.5 shrink-0" aria-hidden />}
-          {counts.interested > 0
-            ? t(locale, "social.interestedCount").replace("{count}", String(counts.interested))
-            : t(locale, "social.interested")}
+          <Heart
+            className={cn(
+              "h-[18px] w-[18px] transition-colors",
+              liked ? "fill-red-500 text-red-500" : "text-muted-foreground",
+            )}
+          />
+          {counts.likes > 0 && (
+            <span className="text-xs tabular-nums text-muted-foreground">
+              {counts.likes}
+            </span>
+          )}
+        </Button>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="gap-1.5 px-2.5 min-h-9 touch-manipulation"
+          onClick={onCommentClick}
+          aria-label={t(locale, "social.comment")}
+        >
+          <MessageCircle className="h-[18px] w-[18px] text-muted-foreground" />
+          {counts.comments > 0 && (
+            <span className="text-xs tabular-nums text-muted-foreground">
+              {counts.comments}
+            </span>
+          )}
         </Button>
       </div>
     </div>
