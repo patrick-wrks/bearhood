@@ -143,8 +143,8 @@ export function EventsExperience() {
         onOpenChange={setIsModalOpen}
         counts={
           selectedEvent
-            ? (countsById[selectedEvent.id] ?? { likes: 0, comments: 0 })
-            : { likes: 0, comments: 0 }
+            ? (countsById[selectedEvent.id] ?? { likes: 0, comments: 0, interested: 0 })
+            : { likes: 0, comments: 0, interested: 0 }
         }
         liked={selectedEvent ? likedIds.has(selectedEvent.id) : false}
         bookmarked={selectedEvent ? bookmarkedIds.has(selectedEvent.id) : false}

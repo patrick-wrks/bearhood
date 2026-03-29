@@ -71,7 +71,7 @@ export function EventGrid({
             <EventCard
               event={event}
               onSelect={onSelectEvent}
-              counts={countsById[event.id] ?? { likes: 0, comments: 0 }}
+              counts={countsById[event.id] ?? { likes: 0, comments: 0, interested: 0 }}
               liked={likedIds.has(event.id)}
               bookmarked={bookmarkedIds.has(event.id)}
               userId={userId}
@@ -88,7 +88,7 @@ export function EventGrid({
             <EventCard
               event={event}
               onSelect={onSelectEvent}
-              counts={countsById[event.id] ?? { likes: 0, comments: 0 }}
+              counts={countsById[event.id] ?? { likes: 0, comments: 0, interested: 0 }}
               liked={likedIds.has(event.id)}
               bookmarked={bookmarkedIds.has(event.id)}
               userId={userId}
