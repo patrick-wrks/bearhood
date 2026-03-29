@@ -1,11 +1,24 @@
 import { hasSupabaseConfig, supabase } from "@/lib/supabase";
 import type { EventItem } from "@/lib/types";
+import type { Locale } from "@/lib/i18n/locales";
 
 import bannerNaughty from "@BearhoodAssets/Banner-Naughty-2.webp";
+import bannerNaughtyText from "@BearhoodAssets/Banner-Naughty-2_text.webp";
 import bannerBearaoke from "@BearhoodAssets/Banner-Bearaoke.webp";
+import bannerBearaokeText from "@BearhoodAssets/Banner-Bearaoke_text.webp";
+import logoNaughty from "@BearhoodAssets/NaughtyLogo.webp";
+import logoBearaoke from "@BearhoodAssets/BearaokeLogo.webp";
 
 function assetToSrc(asset: { src: string } | string): string {
   return typeof asset === "string" ? asset : asset.src;
+}
+
+export function localizedDescription(event: EventItem, locale: Locale): string {
+  return (locale === "de" && event.descriptionDe) || event.description;
+}
+
+export function localizedShortDescription(event: EventItem, locale: Locale): string {
+  return (locale === "de" && event.shortDescriptionDe) || event.shortDescription;
 }
 
 type SupabaseEvent = {
@@ -28,14 +41,19 @@ export const demoEvents: EventItem[] = [
   {
     id: "naughty-club-edition",
     title: "Naughty! club edition",
-    shortDescription: "Naked Industries meets raw desire in dim industrial light.",
+    shortDescription:
+      "Naked Industries meets raw desire in dim industrial light.",
+    shortDescriptionDe:
+      "Naked Industries trifft auf rohes Verlangen im ged\u00e4mpften Industrielicht.",
     description:
-      "Naked Industries <br>Worker-Attitude meets raw desire. Boots on concrete, harness on skin, helmets, suspenders, and industrial vibes in the dim light. Masculine, direct, uncompromising. Here, there is sweat, play, and work—on the body, in the gaze, in the tension between closeness and dominance..<br>Dress it rugged. Wear it proud.",
+      "Naked Industries<br><br>Worker attitude meets raw desire. Boots on concrete, harness on skin, helmets, suspenders, and industrial vibes in the dim light. Masculine, direct, uncompromising. Here, there is sweat, play, and work \u2014 on the body, in the gaze, in the tension between closeness and dominance.<br><br>Dress it rugged. Wear it proud.",
+    descriptionDe:
+      "Naked Industries<br><br>Worker-Attitude trifft auf rohes Verlangen. Stiefel auf Beton, Harness auf Haut, Helme, Hosentr\u00e4ger und industrieller Vibe im ged\u00e4mpften Licht. Maskulin, direkt, kompromisslos. Hier wird geschwitzt, gespielt und gearbeitet \u2013 am K\u00f6rper, im Blick, in der Spannung zwischen N\u00e4he und Dominanz.<br><br>Zieh es rau an. Trag es stolz.",
     date: "2026-03-29T18:00:00+02:00",
-    location:
-      "Club Culture Houze Görlitzerstraße 71, 10997 Berlin.",
-    imageUrl:
-      assetToSrc(bannerNaughty),
+    location: "Club Culture Houze, G\u00f6rlitzer Str. 71, 10997 Berlin",
+    imageUrl: assetToSrc(bannerNaughty),
+    logoUrl: assetToSrc(logoNaughty),
+    heroImageUrl: assetToSrc(bannerNaughtyText),
     ticketUrl:
       "https://www.club-culture-houze.de/Veranstaltung/b-2/?instance_id=38619",
     learnMoreUrl:
@@ -47,16 +65,21 @@ export const demoEvents: EventItem[] = [
   },
   {
     id: "bearoke",
-    title: "Bearoke",
+    title: "Bearaoke",
     shortDescription:
-      "A legendary Bearhood tradition is back: BEARAOKE with karaoke + box hopping.",
+      "A legendary Bearhood tradition is back: BEARAOKE \u2013 karaoke, box hopping, and good vibes.",
+    shortDescriptionDe:
+      "Eine legend\u00e4re Bearhood-Tradition ist zur\u00fcck: BEARAOKE \u2013 Karaoke, Box-Hopping und gute Vibes.",
     description:
-      "Eine legendäre Tradition aus der Zeit lange vor Corona ist zurück!<br><br>Am Gründonnerstag feiern wir die Wiederbelebung von BEARAOKE – laut, herzlich und herrlich ungezwungen.<br><br>Jeder darf mitsingen.<br>Such dir deinen Lieblingssong aus, schnapp dir das Mikro oder sing einfach aus vollem Herzen mit – ganz egal, ob du Bühnenprofi bist oder nur unter der Dusche übst. Hier geht es um Spaß, Gemeinschaft und gute Vibes.<br><br>Durch den Abend führt euch u. a. Monnica Bearvisky mit Charme, Humor und Glamour durch die Bühnenshow.<br><br>✨ Was euch erwartet:<br>Karaoke-Bühnenshow & kostenloses Box-Hopping<br>Optionale Bierflat für 25 €, vor Ort erhältlich 🍺<br>Kostenfreie Garderobe<br>Darkroom für alle, die nach dem Singen noch andere Töne anschlagen wollen<br>Offene, respektvolle Atmosphäre<br>Ob alte BEARAOKE-Stimmen oder neue Gesichter: Komm vorbei, sing dich frei und erlebe mit uns das Comeback einer echten Tradition.<br>Weitere Infos folgen – wir freuen uns auf euch!<br>__________________________________<br><br>A legendary Bearhood tradition from long before COVID is finally back!<br><br>This Maundy Thursday, we’re bringing BEARAOKE back to life – loud, warm-hearted and wonderfully unapologetic.<br><br>Everyone is welcome to sing.<br>Pick your favorite song, grab the mic or simply sing along at the top of your lungs – whether you’re a stage pro or a shower singer. It’s all about fun, community and good vibes.<br><br>Hosted on stage by the fabulous Monnica Bearvisky, guiding you through the night with charm, humor and a touch of glam.<br><br>✨ What to expect:<br>Karaoke stage show & free box hopping<br>Optional beer flat for €25, available on site 🍺<br>Free cloakroom<br>Darkroom for those who want to explore deeper tones later on<br>An open, respectful and welcoming atmosphere<br>Whether you’ve been part of BEARAOKE back in the day or are joining for the first time: Come together, sing it out and celebrate the return of a true tradition.<br>More info coming soon – we can’t wait to see you!",
+      "A legendary Bearhood tradition from long before COVID is finally back!<br><br>This Maundy Thursday, we\u2019re bringing BEARAOKE back to life \u2013 loud, warm-hearted and wonderfully unapologetic.<br><br>Everyone is welcome to sing. Pick your favorite song, grab the mic or simply sing along at the top of your lungs \u2013 whether you\u2019re a stage pro or a shower singer. It\u2019s all about fun, community and good vibes.<br><br>Hosted on stage by the fabulous Monnica Bearvisky, guiding you through the night with charm, humor and a touch of glam.<br><br>\u2728 What to expect:<br>\u2022 Karaoke stage show & free box hopping<br>\u2022 Optional beer flat for \u20ac25, available on site \ud83c\udf7a<br>\u2022 Free cloakroom<br>\u2022 Darkroom for those who want to explore deeper tones later on<br>\u2022 An open, respectful and welcoming atmosphere<br><br>Whether you\u2019ve been part of BEARAOKE back in the day or are joining for the first time: come together, sing it out and celebrate the return of a true tradition.<br><br>More info coming soon \u2013 we can\u2019t wait to see you!",
+    descriptionDe:
+      "Eine legend\u00e4re Tradition aus der Zeit lange vor Corona ist zur\u00fcck!<br><br>Am Gr\u00fcndonnerstag feiern wir die Wiederbelebung von BEARAOKE \u2013 laut, herzlich und herrlich ungezwungen.<br><br>Jeder darf mitsingen. Such dir deinen Lieblingssong aus, schnapp dir das Mikro oder sing einfach aus vollem Herzen mit \u2013 ganz egal, ob du B\u00fchnenprofi bist oder nur unter der Dusche \u00fcbst. Hier geht es um Spa\u00df, Gemeinschaft und gute Vibes.<br><br>Durch den Abend f\u00fchrt euch u.\u00a0a. Monnica Bearvisky mit Charme, Humor und Glamour durch die B\u00fchnenshow.<br><br>\u2728 Was euch erwartet:<br>\u2022 Karaoke-B\u00fchnenshow & kostenloses Box-Hopping<br>\u2022 Optionale Bierflat f\u00fcr 25\u00a0\u20ac, vor Ort erh\u00e4ltlich \ud83c\udf7a<br>\u2022 Kostenfreie Garderobe<br>\u2022 Darkroom f\u00fcr alle, die nach dem Singen noch andere T\u00f6ne anschlagen wollen<br>\u2022 Offene, respektvolle Atmosph\u00e4re<br><br>Ob alte BEARAOKE-Stimmen oder neue Gesichter: Komm vorbei, sing dich frei und erlebe mit uns das Comeback einer echten Tradition.<br><br>Weitere Infos folgen \u2013 wir freuen uns auf euch!",
     date: "2026-04-02T20:00:00+02:00",
     location:
-      "Monster Ronson's Ichiban Karaoke, Warschauer Straße 34, 10243 Berlin",
-    imageUrl:
-      assetToSrc(bannerBearaoke),
+      "Monster Ronson\u2019s Ichiban Karaoke, Warschauer Str. 34, 10243 Berlin",
+    imageUrl: assetToSrc(bannerBearaoke),
+    logoUrl: assetToSrc(logoBearaoke),
+    heroImageUrl: assetToSrc(bannerBearaokeText),
     ticketUrl:
       "https://www.eventbrite.de/e/bearaoke-the-return-tickets-1982241454551?aff=web",
     learnMoreUrl:
@@ -75,6 +98,20 @@ function mapSupabaseEvent(event: SupabaseEvent): EventItem {
       : event.id === "bearoke"
         ? assetToSrc(bannerBearaoke)
         : event.image_url;
+
+  const logoUrl =
+    event.id === "naughty-club-edition"
+      ? assetToSrc(logoNaughty)
+      : event.id === "bearoke"
+        ? assetToSrc(logoBearaoke)
+        : undefined;
+
+  const heroImageUrl =
+    event.id === "naughty-club-edition"
+      ? assetToSrc(bannerNaughtyText)
+      : event.id === "bearoke"
+        ? assetToSrc(bannerBearaokeText)
+        : undefined;
 
   const ticketUrl =
     event.id === "naughty-club-edition"
@@ -98,6 +135,8 @@ function mapSupabaseEvent(event: SupabaseEvent): EventItem {
     date: event.date,
     location: event.location,
     imageUrl,
+    logoUrl,
+    heroImageUrl,
     ticketUrl,
     learnMoreUrl,
     isFeatured: event.is_featured,

@@ -21,9 +21,13 @@ export type EventItem = {
   title: string;
   description: string;
   shortDescription: string;
+  descriptionDe?: string;
+  shortDescriptionDe?: string;
   date: string;
   location: string;
   imageUrl: string;
+  logoUrl?: string;
+  heroImageUrl?: string;
   ticketUrl?: string;
   learnMoreUrl?: string;
   isFeatured: boolean;

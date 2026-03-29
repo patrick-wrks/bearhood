@@ -24,6 +24,7 @@ import type { EventItem, EventSocialCounts } from "@/lib/types";
 import { formatEventDate, formatEventPriceEur, formatEventTime } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
+import { localizedDescription, localizedShortDescription } from "@/lib/events";
 import { SocialActions } from "@/components/social-actions";
 import { CommentSection } from "@/components/comment-section";
 import { useIsDesktop } from "@/lib/use-media-query";
@@ -145,7 +146,7 @@ function EventModalBody({
           ))}
         </div>
 
-        <div className="rounded-lg border border-border/80 bg-muted/20 px-2 py-1">
+        <div className="rounded-lg px-2 py-1">
           <SocialActions
             eventId={event.id}
             counts={counts}
@@ -213,8 +214,8 @@ export function EventModal({
 
   const descriptionText = useMemo(() => {
     if (!event) return "";
-    return event.description.replace(/<br\s*\/?>/gi, "\n");
-  }, [event]);
+    return localizedDescription(event, locale).replace(/<br\s*\/?>/gi, "\n");
+  }, [event, locale]);
 
   const [expanded, setExpanded] = useState(false);
   const needsReadMore = descriptionText.replace(/\s+/g, " ").length > 220;
@@ -258,7 +259,7 @@ export function EventModal({
               {event.title}
             </DrawerTitle>
             <DrawerDescription className="text-left text-muted-foreground">
-              {event.shortDescription}
+              {localizedShortDescription(event, locale)}
             </DrawerDescription>
           </DrawerHeader>
 
@@ -320,7 +321,7 @@ export function EventModal({
           <DialogHeader>
             <DialogTitle className="text-2xl">{event.title}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {event.shortDescription}
+              {localizedShortDescription(event, locale)}
             </DialogDescription>
           </DialogHeader>
 
