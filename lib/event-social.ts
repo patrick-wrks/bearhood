@@ -2,12 +2,12 @@ import { hasSupabaseConfig, supabase } from "@/lib/supabase";
 import type { EventComment, EventSocialCounts } from "@/lib/types";
 
 const demoSocialCounts: Record<string, EventSocialCounts> = {
-  "naughty-club-edition": { likes: 34, comments: 8 },
-  bearoke: { likes: 72, comments: 15 },
+  "naughty-club-edition": { likes: 34, comments: 8, interested: 19 },
+  bearoke: { likes: 72, comments: 15, interested: 48 },
 };
 
 export function getDemoSocialCounts(eventId: string): EventSocialCounts {
-  return demoSocialCounts[eventId] ?? { likes: 0, comments: 0 };
+  return demoSocialCounts[eventId] ?? { likes: 0, comments: 0, interested: 0 };
 }
 
 const demoComments: Record<string, EventComment[]> = {
@@ -40,7 +40,7 @@ export async function getBulkEventSocialCounts(
 ): Promise<Record<string, EventSocialCounts>> {
   const result: Record<string, EventSocialCounts> = {};
   for (const id of eventIds) {
-    result[id] = { likes: 0, comments: 0 };
+    result[id] = { likes: 0, comments: 0, interested: 0 };
   }
 
   if (!hasSupabaseConfig || !supabase || eventIds.length === 0) {
@@ -50,10 +50,14 @@ export async function getBulkEventSocialCounts(
     return result;
   }
 
-  const [likesRes, commentsRes] = await Promise.all([
+  const [likesRes, commentsRes, bookmarksRes] = await Promise.all([
     supabase.from("event_likes").select("event_id").in("event_id", eventIds),
     supabase
       .from("event_comments")
+      .select("event_id")
+      .in("event_id", eventIds),
+    supabase
+      .from("event_bookmarks")
       .select("event_id")
       .in("event_id", eventIds),
   ]);
@@ -69,6 +73,13 @@ export async function getBulkEventSocialCounts(
     for (const row of commentsRes.data as { event_id: string }[]) {
       const bucket = result[row.event_id];
       if (bucket) bucket.comments += 1;
+    }
+  }
+
+  if (bookmarksRes.data) {
+    for (const row of bookmarksRes.data as { event_id: string }[]) {
+      const bucket = result[row.event_id];
+      if (bucket) bucket.interested += 1;
     }
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, MessageCircle, Bookmark } from "lucide-react";
+import { Heart, MessageCircle, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
@@ -121,24 +121,24 @@ export function SocialActions({
       <div className="ml-auto">
         <Button
           type="button"
-          variant="ghost"
+          variant="outline"
           size="sm"
           disabled={busy}
           className={cn(
-            "px-2.5 min-h-9 touch-manipulation",
+            "rounded-full gap-1.5 px-4 min-h-8 touch-manipulation text-xs font-medium transition-all",
+            bookmarked
+              ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90"
+              : "border-border/80 text-muted-foreground hover:text-foreground hover:border-foreground/30",
             bookmarkAnim && "social-btn-pulse",
           )}
           onClick={() => void handleBookmark()}
-          aria-label={t(locale, "social.bookmark")}
+          aria-label={t(locale, "social.interested")}
+          aria-pressed={bookmarked}
         >
-          <Bookmark
-            className={cn(
-              "h-[18px] w-[18px] transition-colors",
-              bookmarked
-                ? "fill-foreground text-foreground"
-                : "text-muted-foreground",
-            )}
-          />
+          {bookmarked && <Check className="h-3.5 w-3.5 shrink-0" aria-hidden />}
+          {counts.interested > 0
+            ? t(locale, "social.interestedCount").replace("{count}", String(counts.interested))
+            : t(locale, "social.interested")}
         </Button>
       </div>
     </div>

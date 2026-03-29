@@ -74,20 +74,20 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
                 <img
                   src={event.imageUrl}
                   alt={event.title}
-                  className="h-[40vh] min-h-[280px] w-full object-cover md:h-[56vh] md:min-h-[400px]"
+                  className="h-[60vh] min-h-[340px] w-full object-cover md:h-[70vh] md:min-h-[480px]"
                   fetchPriority="high"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent md:from-black/65 md:via-black/25" />
 
-                <div className="absolute inset-0 flex items-end p-6 md:p-10">
-                  <div className="max-w-2xl space-y-4">
-                    <p className="inline-flex rounded-full border border-white/50 bg-black/60 px-3 py-1 text-xs font-medium text-white">
+                <div className="absolute inset-0 flex items-end p-8 md:p-14">
+                  <div className="max-w-2xl space-y-5">
+                    <p className="inline-flex rounded-full border border-white/50 bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
                       {t(locale, "hero.featuredEvent")}
                     </p>
-                    <h1 className="text-3xl font-bold tracking-tight text-white md:text-5xl">
+                    <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-md md:text-5xl">
                       {event.title}
                     </h1>
-                    <p className="text-sm text-zinc-200 md:text-base">{event.shortDescription}</p>
+                    <p className="max-w-xl text-sm text-zinc-100 md:text-base">{event.shortDescription}</p>
                     <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-200 md:text-sm">
                       <p className="flex items-center gap-2">
                         <CalendarDays className="h-4 w-4 shrink-0 text-white" aria-hidden />

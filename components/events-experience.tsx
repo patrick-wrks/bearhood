@@ -89,7 +89,7 @@ export function EventsExperience() {
       >
         {eventsLoading ? (
           <div className="space-y-4">
-            <Skeleton className="h-[min(40vh,280px)] w-full rounded-2xl md:h-[min(56vh,520px)]" />
+            <Skeleton className="h-[min(60vh,340px)] w-full rounded-2xl md:h-[min(70vh,520px)]" />
             <div className="flex justify-center gap-2">
               <Skeleton className="h-2.5 w-2.5 rounded-full" />
               <Skeleton className="h-2.5 w-8 rounded-full" />

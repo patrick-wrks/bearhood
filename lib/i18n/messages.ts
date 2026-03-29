@@ -58,7 +58,7 @@ export const MESSAGES = {
     "eventModal.capacity": "Capacity",
 
     "auth.title": "Sign in to Bearhood",
-    "auth.description": "Like, comment, and bookmark events across devices.",
+    "auth.description": "Like, comment, and save events across devices.",
     "auth.tabLogin": "Log in",
     "auth.tabSignup": "Sign up",
     "auth.email": "Email",
@@ -90,7 +90,8 @@ export const MESSAGES = {
 
     "social.like": "Like",
     "social.comment": "Comment",
-    "social.bookmark": "Bookmark",
+    "social.interested": "Interested",
+    "social.interestedCount": "{count} Interested",
     "social.comments": "Comments",
     "social.noComments": "No comments yet. Be the first!",
     "social.loadingComments": "Loading comments…",
@@ -175,7 +176,7 @@ export const MESSAGES = {
     "eventModal.capacity": "Kapazität",
 
     "auth.title": "Bei Bearhood anmelden",
-    "auth.description": "Liken, kommentieren und Events merken — geräteübergreifend.",
+    "auth.description": "Liken, kommentieren und Events speichern — geräteübergreifend.",
     "auth.tabLogin": "Anmelden",
     "auth.tabSignup": "Registrieren",
     "auth.email": "E-Mail",
@@ -207,7 +208,8 @@ export const MESSAGES = {
 
     "social.like": "Gefällt mir",
     "social.comment": "Kommentar",
-    "social.bookmark": "Merken",
+    "social.interested": "Interessiert",
+    "social.interestedCount": "{count} Interessiert",
     "social.comments": "Kommentare",
     "social.noComments": "Noch keine Kommentare. Sei der Erste!",
     "social.loadingComments": "Kommentare laden…",

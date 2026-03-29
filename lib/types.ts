@@ -1,6 +1,7 @@
 export type EventSocialCounts = {
   likes: number;
   comments: number;
+  interested: number;
 };
 
 export type EventComment = {
