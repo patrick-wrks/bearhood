@@ -42,6 +42,7 @@ export const MESSAGES = {
       "Bearhood is a social-first event brand blending music, storytelling, and community into immersive nights. We design playful yet sleek experiences that people remember.",
     "about.followCta": "Follow on Instagram",
     "about.followHint": "Drops, lineups, and behind-the-scenes.",
+    "about.illustrationAlt": "Bearhood bear mascot with logo",
 
     "footer.tagline": "Built for unforgettable event experiences.",
     "footer.copyright": "All rights reserved.",
@@ -269,6 +270,7 @@ export const MESSAGES = {
       "Bearhood ist eine Social-First-Eventmarke, die Musik, Storytelling und Community zu eindrucksvollen Abenden verbindet. Wir gestalten verspielte, aber cleane Erlebnisse, die man nicht vergisst.",
     "about.followCta": "Auf Instagram folgen",
     "about.followHint": "Drops, Line-ups und Einblicke hinter die Kulissen.",
+    "about.illustrationAlt": "Bearhood-Bär mit Logo",
 
     "footer.tagline": "Für unvergessliche Event-Erlebnisse gebaut.",
     "footer.copyright": "Alle Rechte vorbehalten.",
