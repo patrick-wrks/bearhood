@@ -29,6 +29,8 @@ type SupabaseEvent = {
   date: string;
   location: string;
   image_url: string;
+  logo_url?: string;
+  hero_image_url?: string;
   ticket_url?: string;
   learn_more_url?: string;
   is_featured: boolean;
@@ -92,41 +94,6 @@ export const demoEvents: EventItem[] = [
 ];
 
 function mapSupabaseEvent(event: SupabaseEvent): EventItem {
-  const imageUrl =
-    event.id === "naughty-club-edition"
-      ? assetToSrc(bannerNaughty)
-      : event.id === "bearoke"
-        ? assetToSrc(bannerBearaoke)
-        : event.image_url;
-
-  const logoUrl =
-    event.id === "naughty-club-edition"
-      ? assetToSrc(logoNaughty)
-      : event.id === "bearoke"
-        ? assetToSrc(logoBearaoke)
-        : undefined;
-
-  const heroImageUrl =
-    event.id === "naughty-club-edition"
-      ? assetToSrc(bannerNaughtyText)
-      : event.id === "bearoke"
-        ? assetToSrc(bannerBearaokeText)
-        : undefined;
-
-  const ticketUrl =
-    event.id === "naughty-club-edition"
-      ? "https://www.club-culture-houze.de/Veranstaltung/b-2/?instance_id=38619"
-      : event.id === "bearoke"
-        ? "https://www.eventbrite.de/e/bearaoke-the-return-tickets-1982241454551?aff=web"
-        : event.ticket_url;
-
-  const learnMoreUrl =
-    event.id === "naughty-club-edition"
-      ? "https://www.club-culture-houze.de/Veranstaltung/b-2/?instance_id=38619"
-      : event.id === "bearoke"
-        ? "https://www.eventbrite.de/e/bearaoke-the-return-tickets-1982241454551?aff=web"
-        : event.learn_more_url;
-
   return {
     id: event.id,
     title: event.title,
@@ -134,11 +101,11 @@ function mapSupabaseEvent(event: SupabaseEvent): EventItem {
     shortDescription: event.short_description,
     date: event.date,
     location: event.location,
-    imageUrl,
-    logoUrl,
-    heroImageUrl,
-    ticketUrl,
-    learnMoreUrl,
+    imageUrl: event.image_url,
+    logoUrl: event.logo_url,
+    heroImageUrl: event.hero_image_url,
+    ticketUrl: event.ticket_url,
+    learnMoreUrl: event.learn_more_url,
     isFeatured: event.is_featured,
     capacity: event.capacity,
     price: Number(event.price),
