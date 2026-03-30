@@ -66,8 +66,8 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10 md:px-6 md:py-16">
-      <div className="mb-10 max-w-2xl">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 md:px-6 md:py-10 lg:py-16">
+      <div className="mb-6 max-w-2xl md:mb-10">
         <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
           {t(locale, "contact.pageTitle")}
         </h1>
@@ -76,7 +76,7 @@ export default function ContactPage() {
         </p>
       </div>
 
-      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <div className="flex flex-col-reverse gap-8 lg:grid lg:grid-cols-2 lg:gap-16">
         {/* Content */}
         <div className="flex flex-col gap-8">
           <div>
