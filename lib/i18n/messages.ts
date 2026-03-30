@@ -22,6 +22,10 @@ export const MESSAGES = {
     "hero.exploreEvent": "Explore Event",
     "hero.addToCalendar": "Add to Calendar",
     "hero.goToSlide": "Go to slide",
+    "hero.daysRemaining.one": "{count} day left",
+    "hero.daysRemaining.other": "{count} days left",
+    "hero.daysRemaining.today": "Today",
+    "hero.daysRemaining.ended": "Ended",
 
     "events.heroSectionLabel": "Featured events",
     "events.partners": "Partners",
@@ -287,6 +291,10 @@ export const MESSAGES = {
     "hero.exploreEvent": "Event ansehen",
     "hero.addToCalendar": "Zum Kalender hinzufügen",
     "hero.goToSlide": "Zu Folie",
+    "hero.daysRemaining.one": "{count} Tag übrig",
+    "hero.daysRemaining.other": "{count} Tage übrig",
+    "hero.daysRemaining.today": "Heute",
+    "hero.daysRemaining.ended": "Beendet",
 
     "events.heroSectionLabel": "Hervorgehobene Events",
     "events.partners": "Partner",

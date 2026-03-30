@@ -22,6 +22,20 @@ export function formatEventDate(dateIso: string, locale: Locale = "en"): string 
   return `${weekday}. ${day}. ${month}`;
 }
 
+export function getDaysFromToday(dateIso: string): number {
+  const today = new Date();
+  const eventDate = new Date(dateIso);
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const startOfEventDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+  const DAY_IN_MS = 86_400_000;
+
+  return Math.floor((startOfEventDate.getTime() - startOfToday.getTime()) / DAY_IN_MS);
+}
+
+export function getDaysRemaining(dateIso: string): number {
+  return Math.max(0, getDaysFromToday(dateIso));
+}
+
 export function formatEventTime(dateIso: string, locale: Locale = "en"): string {
   const d = new Date(dateIso);
   const bcp = localeToBcp47(locale);
