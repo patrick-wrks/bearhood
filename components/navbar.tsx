@@ -336,8 +336,7 @@ export function Navbar() {
 
             <div className="mt-4">
               {!loading && user ? (
-                <div className="space-y-3">
-                  <p className="truncate text-sm text-muted-foreground">{user.email}</p>
+                <div className="flex justify-end">
                   <Link
                     href={accountHref}
                     onClick={closeMobile}

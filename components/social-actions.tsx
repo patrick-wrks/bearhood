@@ -83,7 +83,7 @@ export function SocialActions({
         size="sm"
         disabled={busy}
         className={cn(
-          "rounded-full gap-1.5 px-4 min-h-8 touch-manipulation text-xs font-medium transition-all",
+          "rounded-md gap-1.5 px-4 min-h-8 touch-manipulation text-xs font-medium transition-all",
           bookmarked
             ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90"
             : "border-border/80 text-muted-foreground hover:text-foreground hover:border-foreground/30",
