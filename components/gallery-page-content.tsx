@@ -13,6 +13,7 @@ import {
 import { getUserRemovalRequests } from "@/lib/gallery-removal";
 import { useAuth } from "@/lib/auth-context";
 import { GalleryLightbox } from "@/components/gallery-lightbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 export function GalleryPageContent({ slug }: { slug: string }) {
@@ -22,6 +23,7 @@ export function GalleryPageContent({ slug }: { slug: string }) {
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [requestedIds, setRequestedIds] = useState<Set<string>>(new Set());
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (!user || !gallery) return;
@@ -79,15 +81,25 @@ export function GalleryPageContent({ slug }: { slug: string }) {
             className={cn(
               "group relative mb-3 block w-full overflow-hidden rounded-lg lg:mb-4",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+              !loadedImages[image.id] && "aspect-[3/4]",
             )}
             onClick={() => setLightboxIndex(i)}
           >
+            {!loadedImages[image.id] && (
+              <Skeleton className="absolute inset-0 z-10 rounded-lg" />
+            )}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={image.src}
               alt={image.id}
-              className="w-full rounded-lg object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+              className={cn(
+                "w-full rounded-lg object-cover transition-all duration-200 group-hover:scale-[1.02]",
+                loadedImages[image.id] ? "opacity-100" : "opacity-0",
+              )}
               loading="lazy"
+              onLoad={() =>
+                setLoadedImages((prev) => ({ ...prev, [image.id]: true }))
+              }
             />
             <div className="absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100">
               <span className="px-2.5 pb-2.5 text-xs font-medium text-white/90">

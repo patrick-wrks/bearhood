@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useAuthModal } from "@/lib/auth-modal-context";
 import { requestImageRemoval } from "@/lib/gallery-removal";
 import type { GalleryImage } from "@/lib/galleries";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 type GalleryLightboxProps = {
@@ -34,6 +35,11 @@ export function GalleryLightbox({
   const { openAuthModal } = useAuthModal();
   const [index, setIndex] = useState(initialIndex);
   const [submitting, setSubmitting] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [index]);
 
   const image = images[index];
   const isRequested = requestedIds.has(image.id);
@@ -123,13 +129,22 @@ export function GalleryLightbox({
       )}
 
       <div className="flex max-h-[90vh] max-w-[90vw] flex-col items-center gap-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image.src}
-          alt={`${image.id}`}
-          className="max-h-[75vh] max-w-full rounded-lg object-contain"
-          draggable={false}
-        />
+        <div className="relative flex items-center justify-center">
+          {!imageLoaded && (
+            <Skeleton className="h-[50vh] w-[60vw] max-w-[600px] rounded-lg" />
+          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={image.src}
+            alt={`${image.id}`}
+            className={cn(
+              "max-h-[75vh] max-w-full rounded-lg object-contain transition-opacity duration-300",
+              imageLoaded ? "opacity-100" : "absolute opacity-0",
+            )}
+            draggable={false}
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
 
         <div className="flex flex-col items-center gap-2">
           <span className="rounded-md bg-white/10 px-3 py-1 text-xs font-medium tracking-wide text-white/80">
