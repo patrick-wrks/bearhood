@@ -35,12 +35,9 @@ export function GalleryLightbox({
   const { openAuthModal } = useAuthModal();
   const [index, setIndex] = useState(initialIndex);
   const [submitting, setSubmitting] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [loadedIndex, setLoadedIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    setImageLoaded(false);
-  }, [index]);
-
+  const imageLoaded = loadedIndex === index;
   const image = images[index];
   const isRequested = requestedIds.has(image.id);
 
@@ -142,7 +139,7 @@ export function GalleryLightbox({
               imageLoaded ? "opacity-100" : "absolute opacity-0",
             )}
             draggable={false}
-            onLoad={() => setImageLoaded(true)}
+            onLoad={() => setLoadedIndex(index)}
           />
         </div>
 
