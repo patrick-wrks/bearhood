@@ -19,6 +19,7 @@ export type EventComment = {
 export type EventItem = {
   id: string;
   title: string;
+  titleDe?: string;
   description: string;
   shortDescription: string;
   descriptionDe?: string;

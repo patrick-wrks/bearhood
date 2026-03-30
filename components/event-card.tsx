@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import type { EventItem, EventSocialCounts } from "@/lib/types";
 import { formatEventDate } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
-import { localizedShortDescription } from "@/lib/events";
+import { localizedShortDescription, localizedTitle } from "@/lib/events";
 import { SocialActions } from "@/components/social-actions";
 import { cn } from "@/lib/utils";
 
@@ -56,14 +56,14 @@ export function EventCard({
           {event.logoUrl && (
             <img
               src={event.logoUrl}
-              alt={event.title}
+              alt={localizedTitle(event, locale)}
               className="pointer-events-none absolute inset-0 m-auto h-24 w-auto max-w-[70%] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
             />
           )}
         </div>
 
         <CardHeader className="px-4 pb-0 pt-4">
-          <CardTitle className="text-lg font-semibold leading-snug">{event.title}</CardTitle>
+          <CardTitle className="text-lg font-semibold leading-snug">{localizedTitle(event, locale)}</CardTitle>
         </CardHeader>
 
         <CardContent className="flex flex-1 flex-col gap-3 px-4 pb-4 pt-2">

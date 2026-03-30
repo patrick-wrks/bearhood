@@ -13,7 +13,7 @@ import { formatEventDate } from "@/lib/utils";
 import type { EventItem } from "@/lib/types";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
-import { localizedShortDescription } from "@/lib/events";
+import { localizedShortDescription, localizedTitle } from "@/lib/events";
 
 const AUTOPLAY_MS = 5000;
 
@@ -62,7 +62,7 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
                       {t(locale, "hero.featuredEvent")}
                     </p>
                     <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-md md:text-5xl">
-                      {event.title}
+                      {localizedTitle(event, locale)}
                     </h1>
                     <p className="max-w-xl text-sm text-zinc-100 md:text-base">{localizedShortDescription(event, locale)}</p>
                     <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-200 md:text-sm">

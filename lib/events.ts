@@ -17,6 +17,10 @@ export function localizedDescription(event: EventItem, locale: Locale): string {
   return (locale === "de" && event.descriptionDe) || event.description;
 }
 
+export function localizedTitle(event: EventItem, locale: Locale): string {
+  return (locale === "de" && event.titleDe) || event.title;
+}
+
 export function localizedShortDescription(event: EventItem, locale: Locale): string {
   return (locale === "de" && event.shortDescriptionDe) || event.shortDescription;
 }
@@ -24,8 +28,11 @@ export function localizedShortDescription(event: EventItem, locale: Locale): str
 type SupabaseEvent = {
   id: string;
   title: string;
+  title_de?: string;
   description: string;
+  description_de?: string;
   short_description: string;
+  short_description_de?: string;
   date: string;
   location: string;
   image_url: string;
@@ -43,6 +50,7 @@ export const demoEvents: EventItem[] = [
   {
     id: "naughty-club-edition",
     title: "Naughty! club edition",
+    titleDe: "Naughty! club edition",
     shortDescription:
       "Naked Industries meets raw desire in dim industrial light.",
     shortDescriptionDe:
@@ -68,6 +76,7 @@ export const demoEvents: EventItem[] = [
   {
     id: "bearoke",
     title: "Bearaoke",
+    titleDe: "Bearaoke",
     shortDescription:
       "A legendary Bearhood tradition is back: BEARAOKE \u2013 karaoke, box hopping, and good vibes.",
     shortDescriptionDe:
@@ -94,11 +103,16 @@ export const demoEvents: EventItem[] = [
 ];
 
 function mapSupabaseEvent(event: SupabaseEvent): EventItem {
+  const demoMatch = demoEvents.find((demoEvent) => demoEvent.id === event.id);
+
   return {
     id: event.id,
     title: event.title,
+    titleDe: event.title_de ?? demoMatch?.titleDe,
     description: event.description,
+    descriptionDe: event.description_de ?? demoMatch?.descriptionDe,
     shortDescription: event.short_description,
+    shortDescriptionDe: event.short_description_de ?? demoMatch?.shortDescriptionDe,
     date: event.date,
     location: event.location,
     imageUrl: event.image_url,

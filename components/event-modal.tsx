@@ -24,7 +24,7 @@ import type { EventItem, EventSocialCounts } from "@/lib/types";
 import { downloadIcsFile, formatEventDate, formatEventPriceEur, formatEventTime } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
-import { localizedDescription, localizedShortDescription } from "@/lib/events";
+import { localizedDescription, localizedShortDescription, localizedTitle } from "@/lib/events";
 import { SocialActions } from "@/components/social-actions";
 import { CommentSection } from "@/components/comment-section";
 import { useIsDesktop } from "@/lib/use-media-query";
@@ -77,6 +77,7 @@ function EventModalBody({
   includeImage = true,
 }: EventModalBodyProps) {
   const locale = useLocale();
+  const title = localizedTitle(event, locale);
   const [showComments, setShowComments] = useState(false);
   const ticketUrl = event.ticketUrl;
 
@@ -86,7 +87,7 @@ function EventModalBody({
         <div className="relative overflow-hidden rounded-md">
           <img
             src={event.imageUrl}
-            alt={event.title}
+            alt={title}
             loading="lazy"
             decoding="async"
             className={imageClassName ?? "h-56 w-full object-cover"}
@@ -95,7 +96,7 @@ function EventModalBody({
           {event.logoUrl && (
             <img
               src={event.logoUrl}
-              alt={event.title}
+              alt={title}
               className="pointer-events-none absolute inset-0 m-auto h-24 w-auto max-w-[70%] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
             />
           )}
@@ -216,6 +217,7 @@ export function EventModal({
   onSocialUpdated,
 }: EventModalProps) {
   const locale = useLocale();
+  const title = event ? localizedTitle(event, locale) : "";
   const isDesktop = useIsDesktop();
 
   const descriptionText = useMemo(() => {
@@ -261,7 +263,7 @@ export function EventModal({
               </Button>
             </DrawerClose>
             <DrawerTitle className="pr-10 text-xl font-semibold leading-tight">
-              {event.title}
+              {title}
             </DrawerTitle>
             <DrawerDescription className="text-left text-muted-foreground">
               {localizedShortDescription(event, locale)}
@@ -316,7 +318,7 @@ export function EventModal({
           <div className="relative overflow-hidden rounded-md">
             <img
               src={event.imageUrl}
-              alt={event.title}
+              alt={title}
               loading="lazy"
               decoding="async"
               className="h-56 w-full object-cover"
@@ -325,13 +327,13 @@ export function EventModal({
             {event.logoUrl && (
               <img
                 src={event.logoUrl}
-                alt={event.title}
+                alt={title}
                 className="pointer-events-none absolute inset-0 m-auto h-24 w-auto max-w-[70%] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
               />
             )}
           </div>
           <DialogHeader>
-            <DialogTitle className="text-2xl">{event.title}</DialogTitle>
+            <DialogTitle className="text-2xl">{title}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
               {localizedShortDescription(event, locale)}
             </DialogDescription>
