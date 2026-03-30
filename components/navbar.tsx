@@ -132,7 +132,7 @@ export function Navbar() {
   const locale = useLocale();
   const pathSansLocalePrefix = useLocalePathSansPrefix();
   const router = useRouter();
-  const { user, loading, signOut } = useAuth();
+  const { user, loading } = useAuth();
   const { openAuthModal } = useAuthModal();
   const [mobileOpen, setMobileOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -212,13 +212,8 @@ export function Navbar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <div className="hidden md:block">
-            <NavbarLanguageSwitch locale={locale} enHref={enHref} deHref={deHref} />
-          </div>
-
-          <div className="hidden md:block">
-            <NavbarThemeToggle locale={locale} />
-          </div>
+          <NavbarLanguageSwitch locale={locale} enHref={enHref} deHref={deHref} />
+          <NavbarThemeToggle locale={locale} />
 
           {!loading && user ? (
             <DropdownMenu>
@@ -247,15 +242,6 @@ export function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push(accountHref)}>
                   {t(locale, "navbar.account")}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  variant="destructive"
-                  onClick={() => {
-                    void signOut();
-                  }}
-                >
-                  {t(locale, "navbar.signOut")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -348,41 +334,19 @@ export function Navbar() {
               </Link>
             </nav>
 
-            <div className="mt-4 flex items-center gap-3">
-              <NavbarLanguageSwitch
-                locale={locale}
-                enHref={enHref}
-                deHref={deHref}
-                onNavigate={closeMobile}
-              />
-              <NavbarThemeToggle locale={locale} />
-            </div>
-
             <div className="mt-4">
               {!loading && user ? (
                 <div className="space-y-3">
                   <p className="truncate text-sm text-muted-foreground">{user.email}</p>
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href={accountHref}
-                      onClick={closeMobile}
-                      className={cn(
-                        buttonVariants({ variant: "outline", size: "sm" }),
-                      )}
-                    >
-                      {t(locale, "navbar.account")}
-                    </Link>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        void signOut();
-                        closeMobile();
-                      }}
-                    >
-                      {t(locale, "navbar.signOut")}
-                    </Button>
-                  </div>
+                  <Link
+                    href={accountHref}
+                    onClick={closeMobile}
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "sm" }),
+                    )}
+                  >
+                    {t(locale, "navbar.account")}
+                  </Link>
                 </div>
               ) : (
                 <Button

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Camera, Loader2, Trash2 } from "lucide-react";
+import { Camera, Loader2, LogOut, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useAuthModal } from "@/lib/auth-modal-context";
@@ -29,7 +29,7 @@ function userInitials(email: string | undefined): string {
 
 export default function AccountPage() {
   const locale = useLocale();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { openAuthModal } = useAuthModal();
 
   const [displayName, setDisplayName] = useState("");
@@ -263,6 +263,20 @@ export default function AccountPage() {
           {t(locale, "auth.email")}
         </p>
         <p className="mt-0.5 text-sm">{user.email}</p>
+      </div>
+
+      <div className="mt-6">
+        <Button
+          type="button"
+          variant="outline"
+          className="text-destructive hover:text-destructive"
+          onClick={() => {
+            void signOut();
+          }}
+        >
+          <LogOut className="mr-1.5 h-4 w-4" />
+          {t(locale, "navbar.signOut")}
+        </Button>
       </div>
     </div>
   );
