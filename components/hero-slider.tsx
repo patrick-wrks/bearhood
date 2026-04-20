@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import Autoplay from "embla-carousel-autoplay";
 import { CalendarDays, MapPin } from "lucide-react";
 import {
@@ -8,7 +9,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { formatEventDate, getDaysFromToday } from "@/lib/utils";
 import type { EventItem } from "@/lib/types";
 import { useLocale } from "@/lib/i18n/use-locale";
@@ -19,10 +21,9 @@ const AUTOPLAY_MS = 5000;
 
 type HeroSliderProps = {
   events: EventItem[];
-  onExploreEvent: (event: EventItem) => void;
 };
 
-export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
+export function HeroSlider({ events }: HeroSliderProps) {
   const locale = useLocale();
   const featuredEvents = React.useMemo(() => {
     const featured = events.filter((event) => event.isFeatured);
@@ -100,14 +101,15 @@ export function HeroSlider({ events, onExploreEvent }: HeroSliderProps) {
                           {event.location}
                         </p>
                       </div>
-                      <Button
-                        size="lg"
-                        type="button"
-                        className="touch-manipulation bg-white text-black hover:bg-white/90"
-                        onClick={() => onExploreEvent(event)}
+                      <Link
+                        href={`/${locale}/events/${event.id}`}
+                        className={cn(
+                          buttonVariants({ size: "lg" }),
+                          "touch-manipulation bg-white text-black hover:bg-white/90",
+                        )}
                       >
                         {t(locale, "hero.exploreEvent")}
-                      </Button>
+                      </Link>
                     </div>
                   </div>
                 </article>

@@ -235,3 +235,20 @@ export async function addEventComment(
 
   return { error: error?.message ?? null };
 }
+
+export async function deleteEventComment(
+  userId: string,
+  commentId: string,
+): Promise<{ error: string | null }> {
+  if (!hasSupabaseConfig || !supabase) {
+    return { error: "Supabase is not configured." };
+  }
+
+  const { error } = await supabase
+    .from("event_comments")
+    .delete()
+    .eq("id", commentId)
+    .eq("user_id", userId);
+
+  return { error: error?.message ?? null };
+}

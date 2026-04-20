@@ -1,15 +1,15 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === "production";
-const repoName = "bearhood";
-
 const nextConfig: NextConfig = {
-  output: "export",
-  basePath: isProd ? `/${repoName}` : "",
-  assetPrefix: isProd ? `/${repoName}/` : undefined,
-  trailingSlash: true,
+  output: "standalone",
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "rgtlwrebnxqeuhpywotu.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
   },
 };
 

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins, Rubik } from "next/font/google";
 import { AppProviders } from "@/components/app-providers";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
@@ -9,6 +9,13 @@ const poppins = Poppins({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const rubik = Rubik({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "700", "800"],
   display: "swap",
 });
 
@@ -60,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${poppins.variable} ${rubik.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full font-sans">
         <AppProviders>
           <div className="flex min-h-screen flex-col">

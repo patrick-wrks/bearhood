@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { Send, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import type { EventComment } from "@/lib/types";
-import { addEventComment, getEventComments } from "@/lib/event-social";
+import { addEventComment, deleteEventComment, getEventComments } from "@/lib/event-social";
 import { useAuthModal } from "@/lib/auth-modal-context";
 
 type CommentSectionProps = {
@@ -30,14 +31,18 @@ function timeAgo(dateStr: string, locale: string): string {
 function CommentBubble({
   comment,
   locale,
+  canDelete,
+  onDelete,
 }: {
   comment: EventComment;
   locale: string;
+  canDelete: boolean;
+  onDelete: (commentId: string) => void;
 }) {
   const name = comment.profile?.username || t(locale as "en" | "de", "social.anonymousUser");
 
   return (
-    <div className="flex gap-3 py-2.5">
+    <div className="group flex gap-3 py-2.5">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold uppercase text-muted-foreground">
         {name.charAt(0)}
       </div>
@@ -52,6 +57,16 @@ function CommentBubble({
           {comment.content}
         </p>
       </div>
+      {canDelete && (
+        <button
+          type="button"
+          onClick={() => onDelete(comment.id)}
+          aria-label={t(locale as "en" | "de", "social.deleteComment")}
+          className="shrink-0 self-start rounded-md p-1.5 text-muted-foreground opacity-0 transition-opacity hover:text-destructive focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      )}
     </div>
   );
 }
@@ -89,6 +104,23 @@ export function CommentSection({
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [comments]);
+
+  const handleDelete = async (commentId: string) => {
+    if (!userId) return;
+    const confirmMsg = t(locale, "social.deleteCommentConfirm");
+    if (!window.confirm(confirmMsg)) return;
+
+    const previous = comments;
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+
+    const { error: err } = await deleteEventComment(userId, commentId);
+    if (err) {
+      setComments(previous);
+      toast.error(t(locale, "social.deleteCommentError"));
+      return;
+    }
+    await onCommentAdded?.();
+  };
 
   const handleSubmit = async () => {
     setError(null);
@@ -135,7 +167,13 @@ export function CommentSection({
           </p>
         ) : (
           comments.map((c) => (
-            <CommentBubble key={c.id} comment={c} locale={locale} />
+            <CommentBubble
+              key={c.id}
+              comment={c}
+              locale={locale}
+              canDelete={!!userId && c.userId === userId}
+              onDelete={(id) => void handleDelete(id)}
+            />
           ))
         )}
       </div>

@@ -1,29 +1,24 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import { EventGrid } from "@/components/event-grid";
-import { HeroSlider } from "@/components/hero-slider";
-import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { demoEvents, getEvents } from "@/lib/events";
 import type { EventItem, EventSocialCounts } from "@/lib/types";
-import { PartnersSection } from "@/components/partners-section";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
 import { useAuth } from "@/lib/auth-context";
 import {
   getBulkEventSocialCounts,
-  getUserLikedEventIds,
   getUserBookmarkedEventIds,
+  getUserLikedEventIds,
 } from "@/lib/event-social";
 
-export function EventsExperience() {
+export function EventsIndexView() {
   const locale = useLocale();
   const { user, authConfigured } = useAuth();
   const [events, setEvents] = useState<EventItem[]>(demoEvents);
-  const [eventsLoading, setEventsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [countsById, setCountsById] = useState<Record<string, EventSocialCounts>>({});
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
@@ -54,18 +49,17 @@ export function EventsExperience() {
 
   useEffect(() => {
     let cancelled = false;
-
     void (async () => {
-      setEventsLoading(true);
-      const fetchedEvents = await getEvents();
+      setLoading(true);
+      const fetched = await getEvents();
       if (cancelled) return;
-      setEvents(fetchedEvents);
-      setEventsLoading(false);
-
-      await syncSocial(fetchedEvents.map((e) => e.id));
+      setEvents(fetched);
+      setLoading(false);
+      await syncSocial(fetched.map((e) => e.id));
     })();
-
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [syncSocial]);
 
   const handleSocialUpdated = useCallback(
@@ -73,50 +67,21 @@ export function EventsExperience() {
     [events, syncSocial],
   );
 
-  const empty = !eventsLoading && events.length === 0;
+  const empty = !loading && events.length === 0;
 
   return (
-    <>
-      <section
-        className="-mx-4 rounded-2xl bg-muted/35 px-4 pt-10 pb-4 md:-mx-0 md:px-6 md:pt-14 md:pb-6"
-        aria-label={t(locale, "events.heroSectionLabel")}
-      >
-        {eventsLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-[min(60vh,340px)] w-full rounded-2xl md:h-[min(70vh,520px)]" />
-            <div className="flex justify-center gap-2">
-              <Skeleton className="h-2.5 w-2.5 rounded-full" />
-              <Skeleton className="h-2.5 w-8 rounded-full" />
-              <Skeleton className="h-2.5 w-2.5 rounded-full" />
-            </div>
-          </div>
-        ) : empty ? null : (
-          <HeroSlider events={events} />
-        )}
-      </section>
+    <section className="mx-auto w-full max-w-7xl px-4 pt-8 pb-16 md:px-6 md:pt-12">
+      <header className="space-y-3">
+        <h1 className="font-display text-4xl font-extrabold tracking-tight md:text-5xl">
+          {t(locale, "eventsIndex.title")}
+        </h1>
+        <p className="max-w-2xl text-base text-muted-foreground">
+          {t(locale, "eventsIndex.description")}
+        </p>
+      </header>
 
-      <PartnersSection />
-
-      <section id="events" className="mt-12 space-y-4 md:mt-20 md:space-y-5">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-              {t(locale, "events.upcomingParties")}
-            </h2>
-            <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
-              {t(locale, "events.upcomingPartiesDescription")}
-            </p>
-          </div>
-          <Link
-            href={`/${locale}/events`}
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            {t(locale, "events.viewAll")}
-          </Link>
-        </div>
-        <Separator className="my-4 md:my-6" />
-
-        {eventsLoading ? (
+      <div className="mt-10">
+        {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-[420px] w-full rounded-xl" />
@@ -137,7 +102,7 @@ export function EventsExperience() {
             onSocialUpdated={handleSocialUpdated}
           />
         )}
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

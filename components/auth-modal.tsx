@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff, X } from "lucide-react";
 import {
   Dialog,
@@ -157,7 +158,10 @@ function PasswordInput({
 
 export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const locale = useLocale();
+  const router = useRouter();
   const { authConfigured, refreshSession, passwordRecovery, clearPasswordRecovery } = useAuth();
+
+  const accountPath = locale === "en" ? "/account" : `/${locale}/account`;
 
   const [view, setView] = useState<View>("auth");
   const [loginMode, setLoginMode] = useState<"password" | "magic">("password");
@@ -222,6 +226,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     }
     await refreshSession();
     handleOpenChange(false);
+    router.push(accountPath);
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -300,7 +305,10 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     clearPasswordRecovery();
     setInfo(t(locale, "auth.passwordUpdated"));
     await refreshSession();
-    setTimeout(() => handleOpenChange(false), 1500);
+    setTimeout(() => {
+      handleOpenChange(false);
+      router.push(accountPath);
+    }, 1500);
   };
 
   if (view === "reset") {

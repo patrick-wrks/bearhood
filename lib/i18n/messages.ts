@@ -34,12 +34,7 @@ export const MESSAGES = {
     "events.upcomingPartiesDescription":
       "Discover the next wave of Bearhood experiences. Tap any event card to view details, lineups, and attendance info.",
 
-    "uiFoundation.title": "UI Foundation",
-    "uiFoundation.description":
-      "Core component playground for Bearhood. This page is your base for building consistent product screens fast.",
-
     "breadcrumb.home": "Home",
-    "breadcrumb.uiFoundation": "UI Foundation",
 
     "about.title": "About Bearhood",
     "about.body":
@@ -105,9 +100,20 @@ export const MESSAGES = {
     "social.sendComment": "Send comment",
     "social.commentError": "Could not post comment. Try again.",
     "social.anonymousUser": "User",
+    "social.deleteComment": "Delete comment",
+    "social.deleteCommentConfirm": "Delete this comment?",
+    "social.deleteCommentError": "Could not delete comment. Try again.",
 
     "events.loading": "Loading events…",
     "events.empty": "No upcoming events right now. Check back soon.",
+    "events.viewAll": "View all",
+
+    "eventsIndex.title": "All Events",
+    "eventsIndex.description":
+      "Every upcoming Bearhood experience — parties, socials, and festival drops. Click any event for details.",
+
+    "eventDetail.backToEvents": "Back to events",
+    "eventDetail.comments": "Comments",
 
     "account.title": "Account",
     "account.description": "Manage your profile details.",
@@ -192,8 +198,10 @@ export const MESSAGES = {
       "Get calendar drops, deal alerts, and party news. No spam — just the good stuff.",
     "newsletter.placeholder": "Your email",
     "newsletter.submit": "Notify me",
+    "newsletter.submitting": "Subscribing…",
     "newsletter.success": "You are on the list — watch your inbox!",
     "newsletter.invalid": "Please enter a valid email address.",
+    "newsletter.error": "Something went wrong. Please try again.",
 
     "faq.sectionLabel": "FAQ",
     "faq.title": "Questions, answered",
@@ -303,12 +311,7 @@ export const MESSAGES = {
     "events.upcomingPartiesDescription":
       "Entdecke die nächste Welle von Bearhood-Erlebnissen. Tippe auf eine Event-Karte, um Details, Line-Ups und Infos zur Teilnahme zu sehen.",
 
-    "uiFoundation.title": "UI Foundation",
-    "uiFoundation.description":
-      "Core-Component-Playground für Bearhood. Diese Seite ist dein Ausgangspunkt, um konsistente Produktscreens schnell zu bauen.",
-
     "breadcrumb.home": "Startseite",
-    "breadcrumb.uiFoundation": "UI Foundation",
 
     "about.title": "Über Bearhood",
     "about.body":
@@ -374,9 +377,20 @@ export const MESSAGES = {
     "social.sendComment": "Kommentar senden",
     "social.commentError": "Kommentar konnte nicht gepostet werden. Bitte erneut versuchen.",
     "social.anonymousUser": "Nutzer",
+    "social.deleteComment": "Kommentar löschen",
+    "social.deleteCommentConfirm": "Diesen Kommentar löschen?",
+    "social.deleteCommentError": "Kommentar konnte nicht gelöscht werden. Bitte erneut versuchen.",
 
     "events.loading": "Events werden geladen…",
     "events.empty": "Derzeit keine anstehenden Events. Schau bald wieder vorbei.",
+    "events.viewAll": "Alle anzeigen",
+
+    "eventsIndex.title": "Alle Events",
+    "eventsIndex.description":
+      "Alle kommenden Bearhood-Erlebnisse — Partys, Socials und Festival-Drops. Klicke auf ein Event für Details.",
+
+    "eventDetail.backToEvents": "Zurück zu den Events",
+    "eventDetail.comments": "Kommentare",
 
     "account.title": "Konto",
     "account.description": "Verwalte deine Profildaten.",
@@ -461,8 +475,10 @@ export const MESSAGES = {
       "Kalender-Drops, Deal-Alerts und Party-News. Kein Spam — nur das Wichtigste.",
     "newsletter.placeholder": "Deine E-Mail",
     "newsletter.submit": "Benachrichtigen",
+    "newsletter.submitting": "Anmeldung läuft…",
     "newsletter.success": "Du bist auf der Liste — schau in dein Postfach!",
     "newsletter.invalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
+    "newsletter.error": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
 
     "faq.sectionLabel": "FAQ",
     "faq.title": "Fragen, beantwortet",

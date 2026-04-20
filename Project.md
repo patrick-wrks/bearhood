@@ -60,7 +60,7 @@ See `.env.local.example` for the full local setup template.
 - **Secret names (values are only in GitHub, never in this repo):** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **`NEXT_PUBLIC_SITE_URL`** also needs to be a GitHub Actions secret (value: `https://patrick-wrks.github.io/bearhood`)
 - **Local dev** uses `.env.local` (see `.env.local.example`); that file is gitignored.
-- **Supabase project:** `bearhood`, ref `xitzmarhnobazxbuthjy`, West EU (Ireland). Linked via CLI.
+- **Supabase project:** `bearhood`, ref `rgtlwrebnxqeuhpywotu`, West EU (Ireland). Linked via CLI.
 - **Schema migrations** live in `supabase/migrations/`. Apply with `supabase db push`.
 
 ## Backlog / Ideas

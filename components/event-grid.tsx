@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 
 type EventGridProps = {
   events: EventItem[];
-  onSelectEvent: (event: EventItem) => void;
   countsById: Record<string, EventSocialCounts>;
   likedIds: Set<string>;
   bookmarkedIds: Set<string>;
@@ -51,7 +50,6 @@ function EventGridReveal({
 
 export function EventGrid({
   events,
-  onSelectEvent,
   countsById,
   likedIds,
   bookmarkedIds,
@@ -70,7 +68,6 @@ export function EventGrid({
           >
             <EventCard
               event={event}
-              onSelect={onSelectEvent}
               counts={countsById[event.id] ?? { likes: 0, comments: 0, interested: 0 }}
               liked={likedIds.has(event.id)}
               bookmarked={bookmarkedIds.has(event.id)}
@@ -87,7 +84,6 @@ export function EventGrid({
           <EventGridReveal key={event.id} index={index}>
             <EventCard
               event={event}
-              onSelect={onSelectEvent}
               counts={countsById[event.id] ?? { likes: 0, comments: 0, interested: 0 }}
               liked={likedIds.has(event.id)}
               bookmarked={bookmarkedIds.has(event.id)}

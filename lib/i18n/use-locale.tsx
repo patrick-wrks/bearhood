@@ -16,8 +16,6 @@ export function useLocale(): Locale {
 export function useLocalePathSansPrefix(): string {
   const pathname = usePathname();
 
-  // Keep the pathname stable for building links (no locale prefix, no basePath segment).
-  // Example: /bearhood/de/ui-foundation -> /ui-foundation
   const normalized = normalizePathname(pathname);
   return stripLocalePrefix(normalized);
 }

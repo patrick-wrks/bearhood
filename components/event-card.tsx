@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { CalendarDays, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,11 +9,10 @@ import { formatEventDate } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { localizedShortDescription, localizedTitle } from "@/lib/events";
 import { SocialActions } from "@/components/social-actions";
-import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type EventCardProps = {
   event: EventItem;
-  onSelect: (event: EventItem) => void;
   counts: EventSocialCounts;
   liked: boolean;
   bookmarked: boolean;
@@ -23,7 +23,6 @@ type EventCardProps = {
 
 export function EventCard({
   event,
-  onSelect,
   counts,
   liked,
   bookmarked,
@@ -32,17 +31,14 @@ export function EventCard({
   onSocialUpdated,
 }: EventCardProps) {
   const locale = useLocale();
+  const router = useRouter();
+  const href = `/${locale}/events/${event.id}`;
 
   return (
     <Card className="group flex h-full flex-col gap-0 overflow-hidden border-border/80 bg-card/80 p-0 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/20">
-      <button
-        type="button"
-        className={cn(
-          "flex flex-1 flex-col text-left",
-          "rounded-t-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        )}
-        onClick={() => onSelect(event)}
-        onKeyDown={(evt) => evt.key === "Enter" && onSelect(event)}
+      <Link
+        href={href}
+        className="flex flex-1 flex-col text-left rounded-t-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         <div className="relative">
           <img
@@ -90,7 +86,7 @@ export function EventCard({
             ))}
           </div>
         </CardContent>
-      </button>
+      </Link>
 
       <CardFooter className="border-t-0 bg-transparent px-4 py-2.5">
         <div
@@ -107,7 +103,7 @@ export function EventCard({
             userId={userId}
             authConfigured={authConfigured}
             onUpdated={onSocialUpdated}
-            onCommentClick={() => onSelect(event)}
+            onCommentClick={() => router.push(`${href}#comments`)}
           />
         </div>
       </CardFooter>

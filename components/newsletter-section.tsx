@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { t } from "@/lib/i18n/messages";
+import { subscribeToNewsletter } from "@/lib/newsletter";
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -14,12 +15,20 @@ function isValidEmail(value: string): boolean {
 export function NewsletterSection() {
   const locale = useLocale();
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
     if (!isValidEmail(trimmed)) {
       toast.error(t(locale, "newsletter.invalid"));
+      return;
+    }
+    setSubmitting(true);
+    const { error } = await subscribeToNewsletter(trimmed, locale);
+    setSubmitting(false);
+    if (error) {
+      toast.error(t(locale, "newsletter.error"));
       return;
     }
     toast.success(t(locale, "newsletter.success"));
@@ -65,9 +74,10 @@ export function NewsletterSection() {
             type="submit"
             size="lg"
             variant="secondary"
+            disabled={submitting}
             className="h-12 min-h-12 shrink-0 touch-manipulation px-8 font-semibold"
           >
-            {t(locale, "newsletter.submit")}
+            {submitting ? t(locale, "newsletter.submitting") : t(locale, "newsletter.submit")}
           </Button>
         </form>
       </div>
